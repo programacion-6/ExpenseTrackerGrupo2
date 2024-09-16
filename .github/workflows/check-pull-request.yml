@@ -1,4 +1,4 @@
-name: Develop Workflow with .Net
+name: Develop Workflow with .Net and Conventional Commits
 
 on:
   pull_request:
@@ -64,3 +64,75 @@ jobs:
           excludeTitle: 'true'
           checkAllCommitMessages: 'true'
           accessToken: ${{ secrets.GITHUB_TOKEN }}
+
+  pull_request_check:
+    name: Pull Request Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Verify pull request title and description
+        run: |
+          PR_TITLE=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
+          PR_BODY=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH")
+
+          echo "Pull Request Title: $PR_TITLE"
+          echo "Pull Request Body: $PR_BODY"
+
+          # Check PR title format: Should match feature/ID-NroID/title-of-the-card
+          if ! [[ "$PR_TITLE" =~ ^(feature|revert|doc|refactor|chore)/ID-[0-9]+/[a-z0-9-]+ ]]; then
+            echo "❌ Pull request title does not follow the correct format."
+            echo "Title must be in the format: feature/ID-NroID/title-of-the-card"
+            exit 1
+          fi
+
+          # Check PR description requirements
+          if ! echo "$PR_BODY" | grep -q "ID-[0-9]\+"; then
+            echo "❌ PR description must include an ID in the format: ID-20."
+            exit 1
+          fi
+
+          if ! echo "$PR_BODY" | grep -q "https://trello.com/c/"; then
+            echo "❌ PR description must include a Trello link."
+            exit 1
+          fi
+
+          if ! echo "$PR_BODY" | grep -q "What did I do?"; then
+            echo "❌ PR description must answer: What did I do?"
+            exit 1
+          fi
+
+          if ! echo "$PR_BODY" | grep -q "Why did I do this?"; then
+            echo "❌ PR description must answer: Why did I do this?"
+            exit 1
+          fi
+
+          if ! echo "$PR_BODY" | grep -q "How did I do it?"; then
+            echo "❌ PR description must answer: How did I do it?"
+            exit 1
+          fi
+
+          echo "✅ Pull request follows the correct format."
+
+      - name: Ensure labels and code reviewers are present
+        run: |
+          LABELS=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
+          REVIEWERS=$(jq -r '.pull_request.requested_reviewers[].login' "$GITHUB_EVENT_PATH")
+
+          if [[ -z "$LABELS" ]]; then
+            echo "❌ Pull request must have a label."
+            exit 1
+          else
+            echo "Labels: $LABELS"
+          fi
+
+          if [[ -z "$REVIEWERS" ]]; then
+            echo "❌ Pull request must have at least one reviewer."
+            exit 1
+          else
+            echo "Reviewers: $REVIEWERS"
+          fi
+
+          echo "✅ Labels and reviewers are set."
