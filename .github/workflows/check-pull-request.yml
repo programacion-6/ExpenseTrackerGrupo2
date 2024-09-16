@@ -73,13 +73,16 @@ jobs:
             exit 1
           fi
 
-          # Ensure Trello Link, US-ID, and other details are provided in PR description
           if ! echo "$PR_BODY" | grep -q "Trello Link"; then
             echo "❌ PR description must include Trello Link."
             exit 1
           fi
           if ! echo "$PR_BODY" | grep -q "ID-[0-9]\+"; then
-            echo "❌ PR description must include an ID in the format: ID - 20."
+            echo "❌ PR description must include an ID in the format: ID-20."
+            exit 1
+          fi
+          if ! echo "$PR_BODY" | grep -q "https://trello.com/c/"; then
+            echo "❌ PR description must include a Trello link."
             exit 1
           fi
           if ! echo "$PR_BODY" | grep -q "What did I do?"; then
