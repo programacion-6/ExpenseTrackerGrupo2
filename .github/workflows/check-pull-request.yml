@@ -24,9 +24,15 @@ jobs:
           message=$(cat last_commit_message.txt)
           echo "Commit message: $message"
 
-          if ! [[ "$message" =~ ^(feat|fix|revert|docs|refactor|chore|test)(\(.*\))?:\ [a-zA-Z0-9\ ]+\;$ ]]; then
+          # Skip merge commit messages
+          if [[ "$message" =~ ^Merge ]]; then
+            echo "Skipping merge commit."
+            exit 0
+          fi
+
+          if ! [[ "$message" =~ ^(feat|fix|revert|docs|refactor|chore)(\(.*\))?:\ [a-zA-Z0-9\ ]+\;$ ]]; then
             echo "❌ Commit message does not follow conventional format."
-            echo "The commit message must start with a prefix: feat, fix, revert, docs, refactor, chore, test."
+            echo "The commit message must start with a prefix: feat, fix, revert, docs, refactor, chore."
             echo "It should be followed by a brief description of what was done, using imperative verbs."
             echo "Example: feat: add search functionality; fix null pointer exception;"
             exit 1
