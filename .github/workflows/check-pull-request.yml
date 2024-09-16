@@ -2,7 +2,7 @@ name: Conventional Commits and Pull Requests
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, synchronize]
   push:
     branches:
       - main
@@ -24,9 +24,9 @@ jobs:
           message=$(cat last_commit_message.txt)
           echo "Commit message: $message"
 
-          if ! [[ "$message" =~ ^(feat|revert|docs|refactor|chore|hotfix)(\(.*\))?:\ [a-zA-Z0-9\ ]+\;$ ]]; then
+          if ! [[ "$message" =~ ^(feat|fix|revert|docs|refactor|chore)(\(.*\))?:\ [a-zA-Z0-9\ ]+\;$ ]]; then
             echo "❌ Commit message does not follow conventional format."
-            echo "The commit message must start with a prefix: feat, hotfix, revert, docs, refactor, chore."
+            echo "The commit message must start with a prefix: feat, fix, revert, docs, refactor, chore."
             echo "It should be followed by a brief description of what was done, using imperative verbs."
             echo "Example: feat: add search functionality; fix null pointer exception;"
             exit 1
@@ -86,6 +86,7 @@ jobs:
             echo "❌ PR description must answer: How did I do it?"
             exit 1
           fi
+          done
 
           echo "✅ Pull request follows the correct format."
 
