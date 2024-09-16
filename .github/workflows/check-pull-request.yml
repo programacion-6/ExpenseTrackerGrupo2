@@ -1,122 +1,80 @@
-name: Conventional Commits and Pull Requests
+name: Develop Workflow with .Net
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
-  push:
     branches:
-      - main
-      - develop
-      - feature/*
-      - hotfix/*
+      - '**'
+
+permissions: read-all
 
 jobs:
-  commit-check:
+  build:
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
-      - name: Check commit message format
-        run: |
-          git log -1 --pretty=format:%s > last_commit_message.txt
-          message=$(cat last_commit_message.txt)
-          echo "Commit message: $message"
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
 
-          # Skip merge commit messages
-          if [[ "$message" =~ ^Merge ]]; then
-            echo "Skipping merge commit."
-            exit 0
-          fi
+      - name: Build using .Net
+        run: dotnet build
 
-          if ! [[ "$message" =~ ^(feat|revert|docs|refactor|chore)(\(.*\))?:\ [a-zA-Z0-9\ ]+\;$ ]]; then
-            echo "❌ Commit message does not follow conventional format."
-            echo "The commit message must start with a prefix: feat, revert, docs, refactor, chore."
-            echo "It should be followed by a brief description of what was done, using imperative verbs."
-            echo "Example: feat: add search functionality; fix null pointer exception"
-            exit 1
-          fi
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: build
 
-      - name: Ensure BREAKING CHANGE is properly formatted
-        run: |
-          if grep -q "BREAKING CHANGE:" last_commit_message.txt; then
-            if ! grep -q "BREAKING CHANGE: .+" last_commit_message.txt; then
-              echo "❌ BREAKING CHANGE must follow the correct format."
-              exit 1
-            fi
-          else
-            echo "No BREAKING CHANGE in commit."
-          fi
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
-  pull-request-check:
+      - name: Test using .Net
+        run: dotnet test
+
+  semantic_pull_request:
+    name: Conventional Pull Request
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            revert
+            docs
+            refactor
+            chore
+            test
+          requireScope: false
+          subjectPattern: ^(?![A-Z]).+$
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            doesn't start with an uppercase character.
+          headerPattern: '^(\w*)(?:\(([\w$.\-*/ ]*)\))?: (.*)$'
+          headerPatternCorrespondence: type, scope, subject
+          validateSingleCommit: true
 
-      - name: Verify pull request title and description
-        run: |
-          PR_TITLE=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
-          PR_BODY=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH")
+  check_commit_messages:
+    name: Conventional Commits Message
+    runs-on: ubuntu-latest
 
-          echo "Pull Request Title: $PR_TITLE"
-          echo "Pull Request Body: $PR_BODY"
-
-          # Check PR title format: Should match feature/ID-NroID/title-of-the-card
-          if ! [[ "$PR_TITLE" =~ ^(feature|revert|doc|refactor|chore)/ID-[0-9]+/[a-z0-9-]+ ]]; then
-            echo "❌ Pull request title does not follow the correct format."
-            echo "Title must be in the format: feature/ID-NroID/title-of-the-card"
-            exit 1
-          fi
-
-          if ! echo "$PR_BODY" | grep -q "ID-[0-9]\+"; then
-            echo "❌ PR description must include an ID in the format: ID-20."
-            exit 1
-          fi
-
-          if ! echo "$PR_BODY" | grep -q "https://trello.com/c/"; then
-            echo "❌ PR description must include a Trello link."
-            exit 1
-          fi
-
-          if ! echo "$PR_BODY" | grep -q "What did I do?"; then
-            echo "❌ PR description must answer: What did I do?"
-            exit 1
-          fi
-
-          if ! echo "$PR_BODY" | grep -q "Why did I do this?"; then
-            echo "❌ PR description must answer: Why did I do this?"
-            exit 1
-          fi
-
-          if ! echo "$PR_BODY" | grep -q "How did I do it?"; then
-            echo "❌ PR description must answer: How did I do it?"
-            exit 1
-          fi
-
-            echo "✅ Pull request follows the correct format."
-
-      - name: Ensure labels and code reviewers are present
-        run: |
-          LABELS=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
-          REVIEWERS=$(jq -r '.pull_request.requested_reviewers[].login' "$GITHUB_EVENT_PATH")
-
-          if [[ -z "$LABELS" ]]; then
-            echo "❌ Pull request must have a label."
-            exit 1
-          else
-            echo "Labels: $LABELS"
-          fi
-
-          if [[ -z "$REVIEWERS" ]]; then
-            echo "❌ Pull request must have at least one reviewer."
-            exit 1
-          else
-            echo "Reviewers: $REVIEWERS"
-          fi
-
-          echo "✅ Labels and reviewers are set."
+    steps:
+      - uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '(?:feat|fix|chore|test|docs|build|ci|style|refactor|perf|revert|hotfix)(?:\(\w+\))?:\s[a-z]{1,2}.+(?:\n\nBREAKING CHANGE: .*)?'
+          error: 'The commit message must have the following structure: <type>(?): <description>'
+          excludeDescription: 'true'
+          excludeTitle: 'true'
+          checkAllCommitMessages: 'true'
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
