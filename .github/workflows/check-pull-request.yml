@@ -73,33 +73,32 @@ jobs:
             exit 1
           fi
 
-          if ! echo "$PR_BODY" | grep -q "Trello Ticket"; then
-            echo "❌ PR description must include Trello Ticket."
-            exit 1
-          fi
           if ! echo "$PR_BODY" | grep -q "ID-[0-9]\+"; then
             echo "❌ PR description must include an ID in the format: ID-20."
             exit 1
           fi
+
           if ! echo "$PR_BODY" | grep -q "https://trello.com/c/"; then
-            echo "❌ PR description must include a Trello Ticket."
+            echo "❌ PR description must include a Trello link."
             exit 1
           fi
+
           if ! echo "$PR_BODY" | grep -q "What did I do?"; then
             echo "❌ PR description must answer: What did I do?"
             exit 1
           fi
+
           if ! echo "$PR_BODY" | grep -q "Why did I do this?"; then
             echo "❌ PR description must answer: Why did I do this?"
             exit 1
           fi
+
           if ! echo "$PR_BODY" | grep -q "How did I do it?"; then
             echo "❌ PR description must answer: How did I do it?"
             exit 1
           fi
-          done
 
-          echo "✅ Pull request follows the correct format."
+            echo "✅ Pull request follows the correct format."
 
       - name: Ensure labels and code reviewers are present
         run: |
