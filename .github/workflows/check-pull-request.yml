@@ -24,6 +24,12 @@ jobs:
           message=$(cat last_commit_message.txt)
           echo "Commit message: $message"
 
+          # Skip merge commit messages
+          if [[ "$message" =~ ^Merge ]]; then
+            echo "Skipping merge commit."
+            exit 0
+          fi
+
           if ! [[ "$message" =~ ^(feat|fix|revert|docs|refactor|chore)(\(.*\))?:\ [a-zA-Z0-9\ ]+\;$ ]]; then
             echo "❌ Commit message does not follow conventional format."
             echo "The commit message must start with a prefix: feat, fix, revert, docs, refactor, chore."
