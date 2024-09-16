@@ -1,0 +1,111 @@
+name: Conventional Commits and Pull Requests
+
+on:
+  pull_request:
+    types: [opened, edited]
+  push:
+    branches:
+      - main
+      - develop
+      - feature/*
+      - hotfix/*
+
+jobs:
+  commit-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check commit message format
+        run: |
+          git log -1 --pretty=format:%s > last_commit_message.txt
+          message=$(cat last_commit_message.txt)
+          echo "Commit message: $message"
+
+          if ! [[ "$message" =~ ^(feat|fix|revert|docs|refactor|chore|test)(\(.*\))?:\ [a-zA-Z0-9\ ]+\;$ ]]; then
+            echo "❌ Commit message does not follow conventional format."
+            echo "The commit message must start with a prefix: feat, fix, revert, docs, refactor, chore, test."
+            echo "It should be followed by a brief description of what was done, using imperative verbs."
+            echo "Example: feat: add search functionality; fix null pointer exception;"
+            exit 1
+          fi
+
+      - name: Ensure BREAKING CHANGE is properly formatted
+        run: |
+          if grep -q "BREAKING CHANGE:" last_commit_message.txt; then
+            if ! grep -q "BREAKING CHANGE: .+" last_commit_message.txt; then
+              echo "❌ BREAKING CHANGE must follow the correct format."
+              exit 1
+            fi
+          else
+            echo "No BREAKING CHANGE in commit."
+          fi
+
+  pull-request-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Verify pull request title and description
+        run: |
+          PR_TITLE=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
+          PR_BODY=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH")
+
+          echo "Pull Request Title: $PR_TITLE"
+          echo "Pull Request Body: $PR_BODY"
+
+          # Check PR title format: Should match feature/ID-NroID/title-of-the-card
+          if ! [[ "$PR_TITLE" =~ ^(feature|doc)/ID-[0-9]+/[a-z0-9-]+ ]]; then
+            echo "❌ Pull request title does not follow the correct format."
+            echo "Title must be in the format: feature/ID-NroID/title-of-the-card"
+            exit 1
+          fi
+
+          # Ensure Trello Link, US-ID, and other details are provided in PR description
+          if ! echo "$PR_BODY" | grep -q "Trello Link"; then
+            echo "❌ PR description must include Trello Link."
+            exit 1
+          fi
+          if ! echo "$PR_BODY" | grep -q "US - ID"; then
+            echo "❌ PR description must include US - ID."
+            exit 1
+          fi
+          if ! echo "$PR_BODY" | grep -q "What did I do?"; then
+            echo "❌ PR description must answer: What did I do?"
+            exit 1
+          fi
+          if ! echo "$PR_BODY" | grep -q "Why did I do this?"; then
+            echo "❌ PR description must answer: Why did I do this?"
+            exit 1
+          fi
+          if ! echo "$PR_BODY" | grep -q "How did I do it?"; then
+            echo "❌ PR description must answer: How did I do it?"
+            exit 1
+          fi
+
+          echo "✅ Pull request follows the correct format."
+
+      - name: Ensure labels and code reviewers are present
+        run: |
+          LABELS=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
+          REVIEWERS=$(jq -r '.pull_request.requested_reviewers[].login' "$GITHUB_EVENT_PATH")
+
+          if [[ -z "$LABELS" ]]; then
+            echo "❌ Pull request must have a label."
+            exit 1
+          else
+            echo "Labels: $LABELS"
+          fi
+
+          if [[ -z "$REVIEWERS" ]]; then
+            echo "❌ Pull request must have at least one reviewer."
+            exit 1
+          else
+            echo "Reviewers: $REVIEWERS"
+          fi
+
+          echo "✅ Labels and reviewers are set."
