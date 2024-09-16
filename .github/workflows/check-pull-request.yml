@@ -128,3 +128,16 @@ jobs:
           fi
 
           echo "✅ Labels and reviewers are set."
+
+  check_branches_convention:
+    name: Conventional Branches Name
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: deepakputhraya/action-branch-name@master
+        with:
+          regex: '^(feature|hotfix)/(ID-[0-9]+/[a-zA-Z0-9-]+|no-ref/[a-zA-Z0-9-]+)$'
+          allowed_prefixes: 'feature,hotfix'
+          ignore: main,develop
+          min_length: 4
+          max_length: 100
