@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
 
       - name: Check commit message format
         run: |
@@ -30,11 +32,11 @@ jobs:
             exit 0
           fi
 
-          if ! [[ "$message" =~ ^(feat|fix|revert|docs|refactor|chore)(\(.*\))?:\ [a-zA-Z0-9\ ]+\;$ ]]; then
+          if ! [[ "$message" =~ ^(feat|revert|docs|refactor|chore)(\(.*\))?:\ [a-zA-Z0-9\ ]+\;$ ]]; then
             echo "❌ Commit message does not follow conventional format."
-            echo "The commit message must start with a prefix: feat, fix, revert, docs, refactor, chore."
+            echo "The commit message must start with a prefix: feat, revert, docs, refactor, chore."
             echo "It should be followed by a brief description of what was done, using imperative verbs."
-            echo "Example: feat: add search functionality; fix null pointer exception;"
+            echo "Example: feat: add search functionality; fix null pointer exception"
             exit 1
           fi
 
@@ -65,7 +67,7 @@ jobs:
           echo "Pull Request Body: $PR_BODY"
 
           # Check PR title format: Should match feature/ID-NroID/title-of-the-card
-          if ! [[ "$PR_TITLE" =~ ^(feature|doc)/ID-[0-9]+/[a-z0-9-]+ ]]; then
+          if ! [[ "$PR_TITLE" =~ ^(feature|revert|doc|refactor|chore)/ID-[0-9]+/[a-z0-9-]+ ]]; then
             echo "❌ Pull request title does not follow the correct format."
             echo "Title must be in the format: feature/ID-NroID/title-of-the-card"
             exit 1
