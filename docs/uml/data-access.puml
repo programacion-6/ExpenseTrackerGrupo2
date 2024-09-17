@@ -53,6 +53,10 @@ package "Data Access Layer" {
             + Email : string
             + Password : string
             + CreatedAt : DateTime
+            + Expenses : IList<Expense>
+            + Incomes : IList<Income>
+            + Budgets : IList<Budget>
+            + Goals : IList<Goal>
         }
 
         class Expense {
@@ -63,6 +67,7 @@ package "Data Access Layer" {
             + Date : DateTime
             + CreatedAt : DateTime
             + UserId : Guid
+            + Users : IList<Users>
         }
 
         class Income {
@@ -72,6 +77,7 @@ package "Data Access Layer" {
             + Date : DateTime
             + CreatedAt : DateTime
             + UserId : Guid
+            + Users : IList<Users>
         }
 
         class Budget {
@@ -79,6 +85,7 @@ package "Data Access Layer" {
             + BudgetAmount : decimal
             + Month : DateTime
             + UserId : Guid
+            + Users : IList<Users>
         }
 
         class Goal {
@@ -86,8 +93,9 @@ package "Data Access Layer" {
             + GoalAmount : decimal
             + Deadline : DateTime
             + CurrentAmount : decimal
-            + CreatedAt
-            + UserId: Guid
+            + CreatedAt : DateTime
+            + UserId : Guid
+            + Users : IList<Users>
         }
     }
 }
