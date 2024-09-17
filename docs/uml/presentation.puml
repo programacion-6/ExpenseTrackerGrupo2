@@ -1,28 +1,7 @@
 @startuml Presentation
 
 package "Presentation Layer" {
-    interface IExpenseController {
-        + CreateExpense()
-        + GetExpenses()
-        + UpdateExpense()
-        + DeleteExpense()
-    }
-
-    interface IIncomeController {
-        + CreateIncome()
-        + GetIncomes()
-        + UpdateIncome()
-        + DeleteIncome()
-    }
-
-    interface IUserController {
-        + RegisterUser()
-        + LoginUser()
-        + UpdateProfile()
-        + ResetPassword()
-    }
-
-    class ExpenseController implements IExpenseController {
+    class ExpenseController implements ControllerBase {
         - expenseService: IExpenseService
         + CreateExpense()
         + GetExpenses()
@@ -30,7 +9,7 @@ package "Presentation Layer" {
         + DeleteExpense()
     }
 
-    class IncomeController implements IIncomeController {
+    class IncomeController implements ControllerBase {
         - incomeService: IIncomeService
         + CreateIncome()
         + GetIncomes()
@@ -38,7 +17,7 @@ package "Presentation Layer" {
         + DeleteIncome()
     }
 
-    class UserController implements IUserController {
+    class UserController implements ControllerBase {
         - userService: IUserService
         + RegisterUser()
         + LoginUser()
