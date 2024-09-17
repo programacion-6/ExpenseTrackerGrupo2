@@ -4,7 +4,6 @@ public class Budget
 {
     private Guid _id;
     private Guid _userId;
-    private string _month;
     private decimal _budgetAmount;
 
     public required Guid Id
@@ -19,11 +18,7 @@ public class Budget
         set => _userId = value;
     }
 
-    public required string Month
-    {
-        get => _month;
-        set => _month = value;
-    }
+    public required string Month { get; set; }
 
     public required decimal BudgetAmount
     {

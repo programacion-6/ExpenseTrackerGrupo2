@@ -5,7 +5,6 @@ public class Income
     private Guid _id;
     private Guid _userId;
     private decimal _amount;
-    private string _source;
     private DateTime _date;
     private DateTime _createdAt;
 
@@ -27,11 +26,7 @@ public class Income
         set => _amount = value;
     }
 
-    public required string Source
-    {
-        get => _source;
-        set => _source = value;
-    }
+    public required string Source { get; set; }
 
     public required DateTime Date
     {

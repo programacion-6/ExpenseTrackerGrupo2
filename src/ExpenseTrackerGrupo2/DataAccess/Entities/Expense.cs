@@ -5,8 +5,6 @@ public class Expense
     private Guid _id;
     private Guid _userId;
     private decimal _amount;
-    private string _description;
-    private string _category;
     private DateTime _date;
     private DateTime _createdAt;
 
@@ -28,17 +26,9 @@ public class Expense
         set => _amount = value;
     }
 
-    public required string Description
-    {
-        get => _description;
-        set => _description = value;
-    }
+    public required string Description { get; set; }
 
-    public required string Category
-    {
-        get => _category;
-        set => _category = value;
-    }
+    public required string Category { get; set; }
 
     public required DateTime Date
     {
