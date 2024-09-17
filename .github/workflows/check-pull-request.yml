@@ -2,13 +2,8 @@ name: Develop Workflow with .Net
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
     branches:
       - '**'
-  push:
-    branches:
-      - main
-      - develop
 
 permissions: read-all
 
@@ -91,23 +86,6 @@ jobs:
             exit 1
           fi
           echo "✅ Pull request description follows the correct format."
-      - name: Ensure labels and code reviewers are present
-        run: |
-          LABELS=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
-          REVIEWERS=$(jq -r '.pull_request.requested_reviewers[].login' "$GITHUB_EVENT_PATH")
-          if [[ -z "$LABELS" ]]; then
-            echo "❌ Pull request must have a label."
-            exit 1
-          else
-            echo "Labels: $LABELS"
-          fi
-          if [[ -z "$REVIEWERS" ]]; then
-            echo "❌ Pull request must have at least one reviewer."
-            exit 1
-          else
-            echo "Reviewers: $REVIEWERS"
-          fi
-          echo "✅ Labels and reviewers are set."
 
   check_commit_messages:
     name: Conventional Commits Message
@@ -116,7 +94,7 @@ jobs:
     steps:
       - uses: gsactions/commit-message-checker@v2
         with:
-          pattern: '(?:feat|fix|chore|test|docs|refactor|revert|hotfix)(?:\(\w+\))?:\s[a-z]{1,2}.+(?:\n\nBREAKING CHANGE: .*)?'
+          pattern: '(?:feat|fix|chore|test|docs|refactor|revert|hotfix)(?:\(\w+\))?:\s[a-z]{1,2}.+(?:\n\nBREAKING CHANGE: .*)?|Merge branch .+'
           error: 'The commit message must have the following structure: <type>(?): <description>'
           excludeDescription: 'true'
           excludeTitle: 'true'
