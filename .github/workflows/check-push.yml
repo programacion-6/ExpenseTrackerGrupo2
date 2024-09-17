@@ -1,0 +1,64 @@
+name: Develop Workflow with .Net
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+permissions: read-all      
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      - name: Build using .Net
+        run: dotnet build
+
+  semantic_pull_request:
+    name: Conventional Pull Request
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            revert
+            docs
+            refactor
+            chore
+            test
+            hotfix
+          requireScope: false
+          subjectPattern: .+
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            doesn't start with an uppercase character.
+          headerPattern: '^(\w*)(?:\(([\w$.\-*/ ]*)\))?: (.*)$'
+          headerPatternCorrespondence: type, scope, subject
+          validateSingleCommit: true
+          
+  check_commit_messages:
+    name: Conventional Commits Message
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '(?:feat|fix|chore|test|docs|refactor|revert|hotfix)(?:\(\w+\))?:\s[a-z]{1,2}.+(?:\n\nBREAKING CHANGE: .*)?|Merge branch .+'
+          error: 'The commit message must have the following structure: <type>(?): <description>'
+          excludeDescription: 'true'
+          excludeTitle: 'true'
+          checkAllCommitMessages: 'true'
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
