@@ -1,4 +1,4 @@
-@startuml grupo2-API
+@startuml Expense Tracker - API
 
 package "Presentation Layer" {
     interface IExpenseController {
@@ -138,12 +138,6 @@ package "Data Access Layer" {
         + DeleteUser()
     }
 
-    ' Strategy Pattern for Database Selection
-    interface IDatabaseStrategy {
-        + SaveData()
-        + LoadData()
-    }
-
     class ExpenseRepository implements IExpenseRepository {
         - databaseStrategy: IDatabaseStrategy
         + AddExpense()
@@ -198,6 +192,10 @@ ServiceFactory --> IUserService
 ExpenseService --> IExpenseRepository
 IncomeService --> IIncomeRepository
 UserService --> IUserRepository
+
+ExpenseRepository --> Expense
+IncomeRepository --> Income
+UserRepository --> User
 
 ExpenseService --> IBudgetObserver : "AddObserver"
 
