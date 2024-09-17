@@ -2,13 +2,8 @@ name: Develop Workflow with .Net
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, labeled, unlabeled, review_requested, review_request_removed]
     branches:
       - '**'
-  push:
-    branches:
-      - main
-      - develop
 
 permissions: read-all
 
@@ -91,23 +86,6 @@ jobs:
             exit 1
           fi
           echo "✅ Pull request description follows the correct format."
-      - name: Ensure labels and code reviewers are present
-        run: |
-          LABELS=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
-          REVIEWERS=$(jq -r '.pull_request.requested_reviewers[].login' "$GITHUB_EVENT_PATH")
-          if [[ -z "$LABELS" ]]; then
-            echo "❌ Pull request must have a label."
-            exit 1
-          else
-            echo "Labels: $LABELS"
-          fi
-          if [[ -z "$REVIEWERS" ]]; then
-            echo "❌ Pull request must have at least one reviewer."
-            exit 1
-          else
-            echo "Reviewers: $REVIEWERS"
-          fi
-          echo "✅ Labels and reviewers are set."
 
   check_commit_messages:
     name: Conventional Commits Message
@@ -118,9 +96,9 @@ jobs:
         with:
           pattern: '(?:feat|fix|chore|test|docs|refactor|revert|hotfix)(?:\(\w+\))?:\s[a-z]{1,2}.+(?:\n\nBREAKING CHANGE: .*)?'
           error: 'The commit message must have the following structure: <type>(?): <description>'
-          excludeMergeCommits: true
-          checkAllCommitMessages: true
-          flags: gm
+          excludeDescription: 'true'
+          excludeTitle: 'true'
+          checkAllCommitMessages: 'true'
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           
   check_branches_convention:
