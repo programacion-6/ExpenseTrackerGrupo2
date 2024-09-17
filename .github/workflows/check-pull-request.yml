@@ -2,8 +2,13 @@ name: Develop Workflow with .Net and Conventional Commits
 
 on:
   pull_request:
+    types: [opened, edited, synchronize]
     branches:
       - '**'
+  push:
+    branches:
+      - main
+      - develop
 
 permissions: read-all
 
