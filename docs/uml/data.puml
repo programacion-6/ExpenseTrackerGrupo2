@@ -1,0 +1,24 @@
+@startuml Relational Database
+
+package "Data" {
+    interface IDatabaseStrategy {
+        + SaveData()
+        + LoadData()
+    }
+
+    ' Concrete implementation for Strategy Pattern
+    class SQLDatabaseStrategy implements IDatabaseStrategy {
+        + SaveData()
+        + LoadData()
+    }
+
+    ' Context class to dynamically select strategy
+    class DatabaseContext {
+        - strategy: IDatabaseStrategy
+        + SetStrategy(strategy: IDatabaseStrategy)
+        + ExecuteSaveData()
+        + ExecuteLoadData()
+    }
+}
+
+@enduml

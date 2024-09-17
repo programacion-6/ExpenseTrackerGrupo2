@@ -1,0 +1,72 @@
+@startuml Business
+
+package "Business Logic Layer" {
+    interface IExpenseService {
+        + CreateExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    interface IIncomeService {
+        + CreateIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    interface IUserService {
+        + RegisterUser()
+        + LoginUser()
+        + UpdateProfile()
+        + ResetPassword()
+    }
+
+    ' Applying Factory Pattern for Services
+    interface IServiceFactory {
+        + CreateExpenseService(): IExpenseService
+        + CreateIncomeService(): IIncomeService
+        + CreateUserService(): IUserService
+    }
+
+    class ServiceFactory implements IServiceFactory {
+        + CreateExpenseService() : IExpenseService
+        + CreateIncomeService() : IIncomeService
+        + CreateUserService() : IUserService
+    }
+
+    ' Observer pattern to notify about budget thresholds
+    interface IBudgetObserver {
+        + NotifyBudgetExceeded()
+    }
+
+    class ExpenseService implements IExpenseService {
+        - expenseRepository: IExpenseRepository
+        - observers: List<IBudgetObserver>
+        + AddObserver(observer: IBudgetObserver)
+        + RemoveObserver(observer: IBudgetObserver)
+        + CreateExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+        + NotifyBudgetExceeded()
+    }
+
+    class IncomeService implements IIncomeService {
+        - incomeRepository: IIncomeRepository
+        + CreateIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    class UserService implements IUserService {
+        - userRepository: IUserRepository
+        + RegisterUser()
+        + LoginUser()
+        + UpdateProfile()
+        + ResetPassword()
+    }
+}
+
+@enduml
