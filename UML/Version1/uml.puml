@@ -186,6 +186,7 @@ package "Infrastructure Layer" {
 }
 
 ' Relationships between layers
+
 ExpenseController --> IExpenseService
 IncomeController --> IIncomeService
 UserController --> IUserService
