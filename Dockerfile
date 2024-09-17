@@ -1,23 +1,21 @@
-# Stage 1: Build Stage
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+# Use the .NET SDK base image to build the application
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+# Set the working directory to /src
 WORKDIR /src
 
-# Restore
-COPY ["ExpenseTrackerGrupo2/ExpenseTrackerGrupo2.csproj", "ExpenseTrackerGrupo2/"]
-RUN dotnet restore "ExpenseTrackerGrupo2/ExpenseTrackerGrupo2.csproj"
+# Copy the csproj file and restore the dependencies
+COPY ExpenseTrackerGrupo2.csproj .
+RUN dotnet restore
 
-# Build
-COPY ["ExpenseTrackerGrupo2", "ExpenseTrackerGrupo2/"]
-WORKDIR /src/ExpenseTrackerGrupo2
-RUN dotnet build "ExpenseTrackerGrupo2.csproj" -c Release -o /app/build
+# Copy the rest of the code and build the application
+COPY . .
+RUN dotnet build -c Release -o /app/build
 
-# Stage 2: Publish Stage
-FROM build AS publish
-RUN dotnet publish "ExpenseTrackerGrupo2.csproj" -c Release -o /app/publish
-
-# Stage 3: Run Stage
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+# Use the base runtime image to run the application
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-EXPOSE 5002
-COPY --from=publish /app/publish .
+COPY --from=build /app/build .
+
+# Configura el comando de inicio
 ENTRYPOINT ["dotnet", "ExpenseTrackerGrupo2.dll"]
