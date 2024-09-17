@@ -119,9 +119,8 @@ jobs:
           pattern: '(?:feat|fix|chore|test|docs|refactor|revert|hotfix)(?:\(\w+\))?:\s[a-z]{1,2}.+(?:\n\nBREAKING CHANGE: .*)?'
           error: 'The commit message must have the following structure: <type>(?): <description>'
           excludeMergeCommits: true
-          excludeDescription: true
-          excludeTitle: true
           checkAllCommitMessages: true
+          flags: gm
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           
   check_branches_convention:
