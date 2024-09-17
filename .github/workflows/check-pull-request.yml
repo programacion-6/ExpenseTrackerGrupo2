@@ -2,7 +2,7 @@ name: Develop Workflow with .Net
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
+    types: [opened, edited, synchronize, labeled, unlabeled, review_requested, review_request_removed]
     branches:
       - '**'
   push:
@@ -118,6 +118,7 @@ jobs:
         with:
           pattern: '(?:feat|fix|chore|test|docs|refactor|revert|hotfix)(?:\(\w+\))?:\s[a-z]{1,2}.+(?:\n\nBREAKING CHANGE: .*)?'
           error: 'The commit message must have the following structure: <type>(?): <description>'
+          excludeMergeCommits: 'true'
           excludeDescription: 'true'
           excludeTitle: 'true'
           checkAllCommitMessages: 'true'
