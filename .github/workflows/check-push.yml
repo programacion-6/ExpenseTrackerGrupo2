@@ -1,9 +1,10 @@
 name: Develop Workflow with .Net
 
 on:
-  pull_request:
+  push:
     branches:
-      - '**'
+      - main
+      - develop
 
 permissions: read-all      
 
