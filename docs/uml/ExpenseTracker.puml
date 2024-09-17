@@ -161,6 +161,32 @@ package "Data Access Layer" {
         + UpdateUser()
         + DeleteUser()
     }
+
+    package "Entities" {
+        class Expense {
+            + Id: Guid
+            + Amount: double
+            + Category: String
+            + Date: Date
+            + Description: String
+        }
+
+        class Income {
+            + Id: Guid
+            + Amount: double
+            + Source: String
+            + Date: Date
+            + Description: String
+        }
+
+        class User {
+            + Id: Guid
+            + Name: String
+            + Email: String
+            + Password: String
+            + CreatedAt: Date
+        }
+    }
 }
 
 package "Infrastructure Layer" {
