@@ -1,0 +1,50 @@
+@startuml Presentation
+
+package "Presentation Layer" {
+    interface IExpenseController {
+        + CreateExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    interface IIncomeController {
+        + CreateIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    interface IUserController {
+        + RegisterUser()
+        + LoginUser()
+        + UpdateProfile()
+        + ResetPassword()
+    }
+
+    class ExpenseController implements IExpenseController {
+        - expenseService: IExpenseService
+        + CreateExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    class IncomeController implements IIncomeController {
+        - incomeService: IIncomeService
+        + CreateIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    class UserController implements IUserController {
+        - userService: IUserService
+        + RegisterUser()
+        + LoginUser()
+        + UpdateProfile()
+        + ResetPassword()
+    }
+}
+
+@enduml

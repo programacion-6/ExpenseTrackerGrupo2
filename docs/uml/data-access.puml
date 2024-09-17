@@ -1,0 +1,95 @@
+@startuml Data Access
+
+package "Data Access Layer" {
+    interface IExpenseRepository {
+        + AddExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    interface IIncomeRepository {
+        + AddIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    interface IUserRepository {
+        + AddUser()
+        + GetUser()
+        + UpdateUser()
+        + DeleteUser()
+    }
+
+    class ExpenseRepository implements IExpenseRepository {
+        - databaseStrategy: IDatabaseStrategy
+        + AddExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    class IncomeRepository implements IIncomeRepository {
+        - databaseStrategy: IDatabaseStrategy
+        + AddIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    class UserRepository implements IUserRepository {
+        - databaseStrategy: IDatabaseStrategy
+        + AddUser()
+        + GetUser()
+        + UpdateUser()
+        + DeleteUser()
+    }
+
+    package "Entities" {
+        class User {
+            + Id : Guid
+            + AccountName : string
+            + Email : string
+            + Password : string
+            + CreatedAt : DateTime
+        }
+
+        class Expense {
+            + Id : Guid
+            + Amount : decimal
+            + Description : string
+            + Category : string
+            + Date : DateTime
+            + CreatedAt : DateTime
+            + UserId : Guid
+        }
+
+        class Income {
+            + Id : Guid
+            + Amount : decimal
+            + Source : string
+            + Date : DateTime
+            + CreatedAt : DateTime
+            + UserId : Guid
+        }
+
+        class Budget {
+            + Id : Guid
+            + BudgetAmount : decimal
+            + Month : DateTime
+            + UserId : Guid
+        }
+
+        class Goal {
+            + Id : Guid
+            + GoalAmount : decimal
+            + Deadline : DateTime
+            + CurrentAmount : decimal
+            + CreatedAt
+            + UserId: Guid
+        }
+    }
+}
+
+@enduml

@@ -1,0 +1,37 @@
+@startuml Expense Tracker - API
+
+package "Infrastructure" {
+    !include data.puml
+    !include data-access.puml
+    !include business-logic.puml
+    !include presentation.puml
+
+    ' Relationships between layers
+    
+    ExpenseController --> IExpenseService
+    IncomeController --> IIncomeService
+    UserController --> IUserService
+
+    ServiceFactory --> IExpenseService
+    ServiceFactory --> IIncomeService
+    ServiceFactory --> IUserService
+
+    ExpenseService --> IExpenseRepository
+    IncomeService --> IIncomeRepository
+    UserService --> IUserRepository
+
+    ExpenseRepository --> Expense
+    IncomeRepository --> Income
+    UserRepository --> User
+
+    ExpenseService --> IBudgetObserver : "AddObserver"
+
+    ExpenseRepository --> IDatabaseStrategy
+    IncomeRepository --> IDatabaseStrategy
+    UserRepository --> IDatabaseStrategy
+
+    DatabaseContext --> IDatabaseStrategy
+    SQLDatabaseStrategy --> DatabaseContext
+}
+
+@enduml
