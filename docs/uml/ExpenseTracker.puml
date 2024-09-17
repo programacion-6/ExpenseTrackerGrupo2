@@ -163,28 +163,47 @@ package "Data Access Layer" {
     }
 
     package "Entities" {
+        class User {
+            + Id : Guid
+            + AccountName : string
+            + Email : string
+            + Password : string
+            + CreatedAt : DateTime
+        }
+
         class Expense {
-            + Id: Guid
-            + Amount: double
-            + Category: String
-            + Date: Date
-            + Description: String
+            + Id : Guid
+            + Amount : decimal
+            + Description : string
+            + Category : string
+            + Date : DateTime
+            + CreatedAt : DateTime
+            + UserId : Guid
         }
 
         class Income {
-            + Id: Guid
-            + Amount: double
-            + Source: String
-            + Date: Date
-            + Description: String
+            + Id : Guid
+            + Amount : decimal
+            + Source : string
+            + Date : DateTime
+            + CreatedAt : DateTime
+            + UserId : Guid
         }
 
-        class User {
-            + Id: Guid
-            + Name: String
-            + Email: String
-            + Password: String
-            + CreatedAt: Date
+        class Budget {
+            + Id : Guid
+            + BudgetAmount : decimal
+            + Month : DateTime
+            + UserId : Guid
+        }
+
+        class Goal {
+            + Id : Guid
+            + GoalAmount : decimal
+            + Deadline : DateTime
+            + CurrentAmount : decimal
+            + CreatedAt
+            + UserId: Id
         }
     }
 }
