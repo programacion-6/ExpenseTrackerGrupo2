@@ -1,49 +1,37 @@
 @startuml Data Access
 
 package "Data Access Layer" {
-    interface IExpenseRepository {
-        + AddExpense()
-        + GetExpenses()
-        + UpdateExpense()
-        + DeleteExpense()
+    interface IBaseRepository {
+        + GetAll(T entity) : Task<int>
+        + GetById(T entity) : Task<int>
+        + Create(T entity) : Task<int>
+        + Update(T entity) : Task<int>
+        + Delele(T entity) : Task<bool>
     }
 
-    interface IIncomeRepository {
-        + AddIncome()
-        + GetIncomes()
-        + UpdateIncome()
-        + DeleteIncome()
+    interface IUserRepository implements IBaseRepository {
+        + ResetPassword(int code) : Task<User>
+    }
+    
+    interface IExpenseRepository implements IBaseRepository {
+        + GetExpenseByCategory(string category) : Task<IList<Expense>>
+        + GetExpenseByDate(DateTime startDate, DateTime endDate) : Task<int>
     }
 
-    interface IUserRepository {
-        + AddUser()
-        + GetUser()
-        + UpdateUser()
-        + DeleteUser()
-    }
-
-    class ExpenseRepository implements IExpenseRepository {
-        - databaseStrategy: IDatabaseStrategy
-        + AddExpense()
-        + GetExpenses()
-        + UpdateExpense()
-        + DeleteExpense()
-    }
-
-    class IncomeRepository implements IIncomeRepository {
-        - databaseStrategy: IDatabaseStrategy
-        + AddIncome()
-        + GetIncomes()
-        + UpdateIncome()
-        + DeleteIncome()
+    interface IIncomeRepository implements IBaseRepository {
+        + CreateIncomeBySource(string source) : Task<IList<Income>>
     }
 
     class UserRepository implements IUserRepository {
         - databaseStrategy: IDatabaseStrategy
-        + AddUser()
-        + GetUser()
-        + UpdateUser()
-        + DeleteUser()
+    }
+
+    class ExpenseRepository implements IExpenseRepository {
+        - databaseStrategy: IDatabaseStrategy
+    }
+
+    class IncomeRepository implements IIncomeRepository {
+        - databaseStrategy: IDatabaseStrategy
     }
 
     package "Entities" {
