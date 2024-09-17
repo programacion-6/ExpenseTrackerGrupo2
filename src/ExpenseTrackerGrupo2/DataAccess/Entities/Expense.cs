@@ -1,8 +1,6 @@
-using ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Entities.Interfaces;
-
 namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Entities;
 
-public class Expense : IEntity
+public class Expense
 {
     private Guid _id;
     private Guid _userId;
