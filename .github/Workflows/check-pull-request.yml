@@ -1,4 +1,4 @@
-name: Develop Workflow with .Net and Conventional Commits
+name: Develop Workflow with .Net
 
 on:
   pull_request:
