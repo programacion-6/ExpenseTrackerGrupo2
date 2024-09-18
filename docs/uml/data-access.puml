@@ -1,0 +1,91 @@
+@startuml Data Access
+
+package "Data Access Layer" {
+    interface IBaseRepository {
+        + GetAll() : Task<IList<T>>  
+        + GetById(T id) : Task<T>
+        + Create(T entity) : Task<int>
+        + Update(T entity) : Task<int>
+        + Delele(T id) : Task<bool>
+    }
+
+    interface IUserRepository implements IBaseRepository {
+        + ResetPassword(int code) : Task<User>
+    }
+    
+    interface IExpenseRepository implements IBaseRepository {
+        + GetExpenseByCategory(string category) : Task<IList<Expense>>
+        + GetExpenseByDate(DateTime startDate, DateTime endDate) : Task<int>
+    }
+
+    interface IIncomeRepository implements IBaseRepository {
+        + CreateIncomeBySource(string source) : Task<IList<Income>>
+    }
+
+    class UserRepository implements IUserRepository {
+        - databaseStrategy: IDatabaseStrategy
+    }
+
+    class ExpenseRepository implements IExpenseRepository {
+        - databaseStrategy: IDatabaseStrategy
+    }
+
+    class IncomeRepository implements IIncomeRepository {
+        - databaseStrategy: IDatabaseStrategy
+    }
+
+    package "Entities" {
+        class User {
+            + Id : Guid
+            + AccountName : string
+            + Email : string
+            + Password : string
+            + CreatedAt : DateTime
+            + Expenses : IList<Expense>
+            + Incomes : IList<Income>
+            + Budgets : IList<Budget>
+            + Goals : IList<Goal>
+        }
+
+        class Expense {
+            + Id : Guid
+            + Amount : decimal
+            + Description : string
+            + Category : string
+            + Date : DateTime
+            + CreatedAt : DateTime
+            + UserId : Guid
+            + Users : IList<Users>
+        }
+
+        class Income {
+            + Id : Guid
+            + Amount : decimal
+            + Source : string
+            + Date : DateTime
+            + CreatedAt : DateTime
+            + UserId : Guid
+            + Users : IList<Users>
+        }
+
+        class Budget {
+            + Id : Guid
+            + BudgetAmount : decimal
+            + Month : DateTime
+            + UserId : Guid
+            + Users : IList<Users>
+        }
+
+        class Goal {
+            + Id : Guid
+            + GoalAmount : decimal
+            + Deadline : DateTime
+            + CurrentAmount : decimal
+            + CreatedAt : DateTime
+            + UserId : Guid
+            + Users : IList<Users>
+        }
+    }
+}
+
+@enduml

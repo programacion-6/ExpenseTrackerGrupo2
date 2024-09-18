@@ -1,4 +1,4 @@
-@startuml Expense Tracker - API
+@startuml expense-tracker-api
 
 package "Presentation Layer" {
     interface IExpenseController {
@@ -138,6 +138,12 @@ package "Data Access Layer" {
         + DeleteUser()
     }
 
+    ' Strategy Pattern for Database Selection
+    interface IDatabaseStrategy {
+        + SaveData()
+        + LoadData()
+    }
+
     class ExpenseRepository implements IExpenseRepository {
         - databaseStrategy: IDatabaseStrategy
         + AddExpense()
@@ -161,51 +167,6 @@ package "Data Access Layer" {
         + UpdateUser()
         + DeleteUser()
     }
-
-    package "Entities" {
-        class User {
-            + Id : Guid
-            + AccountName : string
-            + Email : string
-            + Password : string
-            + CreatedAt : DateTime
-        }
-
-        class Expense {
-            + Id : Guid
-            + Amount : decimal
-            + Description : string
-            + Category : string
-            + Date : DateTime
-            + CreatedAt : DateTime
-            + UserId : Guid
-        }
-
-        class Income {
-            + Id : Guid
-            + Amount : decimal
-            + Source : string
-            + Date : DateTime
-            + CreatedAt : DateTime
-            + UserId : Guid
-        }
-
-        class Budget {
-            + Id : Guid
-            + BudgetAmount : decimal
-            + Month : DateTime
-            + UserId : Guid
-        }
-
-        class Goal {
-            + Id : Guid
-            + GoalAmount : decimal
-            + Deadline : DateTime
-            + CurrentAmount : decimal
-            + CreatedAt
-            + UserId: Id
-        }
-    }
 }
 
 package "Infrastructure Layer" {
@@ -225,7 +186,6 @@ package "Infrastructure Layer" {
 }
 
 ' Relationships between layers
-
 ExpenseController --> IExpenseService
 IncomeController --> IIncomeService
 UserController --> IUserService
@@ -237,10 +197,6 @@ ServiceFactory --> IUserService
 ExpenseService --> IExpenseRepository
 IncomeService --> IIncomeRepository
 UserService --> IUserRepository
-
-ExpenseRepository --> Expense
-IncomeRepository --> Income
-UserRepository --> User
 
 ExpenseService --> IBudgetObserver : "AddObserver"
 

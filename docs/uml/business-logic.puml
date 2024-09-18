@@ -1,0 +1,113 @@
+@startuml Business
+
+package "Business Logic Layer" {
+    package "Services Layer" {
+            interface IExpenseService {
+            + CreateExpense()
+            + GetExpenses()
+            + UpdateExpense()
+            + DeleteExpense()
+        }
+
+            interface IIncomeService {
+            + CreateIncome()
+            + GetIncomes()
+            + UpdateIncome()
+            + DeleteIncome()
+        }
+
+        interface IUserService {
+            + RegisterUser()
+            + LoginUser()
+            + UpdateProfile()
+            + ResetPassword()
+        }
+
+        ' Applying Factory Pattern for Services
+        interface IServiceFactory {
+            + CreateExpenseService(): IExpenseService
+            + CreateIncomeService(): IIncomeService
+            + CreateUserService(): IUserService
+        }
+
+        class ServiceFactory implements IServiceFactory {
+            + CreateExpenseService() : IExpenseService
+            + CreateIncomeService() : IIncomeService
+            + CreateUserService() : IUserService
+        }
+
+        ' Observer pattern to notify about budget thresholds
+        interface IBudgetObserver {
+            + NotifyBudgetExceeded()
+        }
+    }
+
+    package "Logic Layer" {
+        class ExpenseService implements IExpenseService {
+            - expenseRepository: IExpenseRepository
+            - observers: List<IBudgetObserver>
+            + AddObserver(observer: IBudgetObserver)
+            + RemoveObserver(observer: IBudgetObserver)
+            + CreateExpense()
+            + GetExpenses()
+            + UpdateExpense()
+            + DeleteExpense()
+            + NotifyBudgetExceeded()
+        }
+
+        class IncomeService implements IIncomeService {
+            - incomeRepository: IIncomeRepository
+            + CreateIncome()
+            + GetIncomes()
+            + UpdateIncome()
+            + DeleteIncome()
+        }
+
+        class UserService implements IUserService {
+            - userRepository: IUserRepository
+            + RegisterUser()
+            + LoginUser()
+            + UpdateProfile()
+            + ResetPassword()
+        }
+    }
+
+    package "DTO Adapters" {
+        class UserDTO {
+            + Id : Guid
+            + AccountName : string
+            + Email : string
+            + Password : string
+        }
+
+        class ExpenseDTO {
+            + Id : Guid
+            + Amount : decimal
+            + Description : string
+            + Category : string
+            + Date : DateTime
+        }
+
+        class IncomeDTO {
+            + Id : Guid
+            + Amount : decimal
+            + Source : string
+            + Date : DateTime
+        }
+
+        class BudgetDTO {
+            + Id : Guid
+            + BudgetAmount : decimal
+            + Month : DateTime
+        }
+
+        class GoalDTO {
+            + Id : Guid
+            + GoalAmount : decimal
+            + Deadline : DateTime
+            + CurrentAmount : decimal
+        }
+    }
+}
+
+@enduml

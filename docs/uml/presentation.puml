@@ -1,0 +1,29 @@
+@startuml Presentation
+
+package "Presentation Layer" {
+    class ExpenseController implements ControllerBase {
+        - expenseService: IExpenseService
+        + CreateExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    class IncomeController implements ControllerBase {
+        - incomeService: IIncomeService
+        + CreateIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    class UserController implements ControllerBase {
+        - userService: IUserService
+        + RegisterUser()
+        + LoginUser()
+        + UpdateProfile()
+        + ResetPassword()
+    }
+}
+
+@enduml
