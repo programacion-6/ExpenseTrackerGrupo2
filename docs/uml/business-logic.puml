@@ -71,6 +71,43 @@ package "Business Logic Layer" {
             + ResetPassword()
         }
     }
+
+    package "DTO Adapters" {
+        class UserDTO {
+            + Id : Guid
+            + AccountName : string
+            + Email : string
+            + Password : string
+        }
+
+        class ExpenseDTO {
+            + Id : Guid
+            + Amount : decimal
+            + Description : string
+            + Category : string
+            + Date : DateTime
+        }
+
+        class IncomeDTO {
+            + Id : Guid
+            + Amount : decimal
+            + Source : string
+            + Date : DateTime
+        }
+
+        class BudgetDTO {
+            + Id : Guid
+            + BudgetAmount : decimal
+            + Month : DateTime
+        }
+
+        class GoalDTO {
+            + Id : Guid
+            + GoalAmount : decimal
+            + Deadline : DateTime
+            + CurrentAmount : decimal
+        }
+    }
 }
 
 @enduml
