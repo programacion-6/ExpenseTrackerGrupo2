@@ -1,0 +1,41 @@
+# Ignore the .vs directory (Visual Studio temporary files)
+.vs/
+
+# Ignore Rider specific files
+.idea/
+.idea/**
+
+# Ignore VSCode specific files
+.vscode/
+
+# Ignore the bin and obj directories (build output)
+bin/
+obj/
+
+# Ignore user-specific files
+*.swp
+*.csproj.user
+*.suo
+
+# Ignore logs and temp files
+*.log
+logs/
+temp/
+tmp/
+
+# Ignore NuGet packages if you have a local packages folder
+packages/
+.nuget/
+
+# Ignore app settings with sensitive data (optional)
+appsettings.Development.json
+appsettings.*.json
+
+# Docker related files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Ignore coverage reports and test results
+TestResults/
+Coverage/
