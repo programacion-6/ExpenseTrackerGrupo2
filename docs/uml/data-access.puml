@@ -2,11 +2,11 @@
 
 package "Data Access Layer" {
     interface IBaseRepository {
-        + GetAll() : Task<IEnumerable<T>>  
+        + GetAll() : Task<IList<T>>  
         + GetById(T id) : Task<T>
         + Create(T entity) : Task<int>
         + Update(T entity) : Task<int>
-        + Delele(T id) : Task<bool> 
+        + Delele(T id) : Task<bool>
     }
 
     interface IUserRepository implements IBaseRepository {
