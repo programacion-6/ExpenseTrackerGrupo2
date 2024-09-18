@@ -1,0 +1,210 @@
+@startuml expense-tracker-api
+
+package "Presentation Layer" {
+    interface IExpenseController {
+        + CreateExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    interface IIncomeController {
+        + CreateIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    interface IUserController {
+        + RegisterUser()
+        + LoginUser()
+        + UpdateProfile()
+        + ResetPassword()
+    }
+
+    class ExpenseController implements IExpenseController {
+        - expenseService: IExpenseService
+        + CreateExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    class IncomeController implements IIncomeController {
+        - incomeService: IIncomeService
+        + CreateIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    class UserController implements IUserController {
+        - userService: IUserService
+        + RegisterUser()
+        + LoginUser()
+        + UpdateProfile()
+        + ResetPassword()
+    }
+}
+
+package "Business Logic Layer" {
+    interface IExpenseService {
+        + CreateExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    interface IIncomeService {
+        + CreateIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    interface IUserService {
+        + RegisterUser()
+        + LoginUser()
+        + UpdateProfile()
+        + ResetPassword()
+    }
+
+    ' Applying Factory Pattern for Services
+    interface IServiceFactory {
+        + CreateExpenseService(): IExpenseService
+        + CreateIncomeService(): IIncomeService
+        + CreateUserService(): IUserService
+    }
+
+    class ServiceFactory implements IServiceFactory {
+        + CreateExpenseService() : IExpenseService
+        + CreateIncomeService() : IIncomeService
+        + CreateUserService() : IUserService
+    }
+
+    ' Observer pattern to notify about budget thresholds
+    interface IBudgetObserver {
+        + NotifyBudgetExceeded()
+    }
+
+    class ExpenseService implements IExpenseService {
+        - expenseRepository: IExpenseRepository
+        - observers: List<IBudgetObserver>
+        + AddObserver(observer: IBudgetObserver)
+        + RemoveObserver(observer: IBudgetObserver)
+        + CreateExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+        + NotifyBudgetExceeded()
+    }
+
+    class IncomeService implements IIncomeService {
+        - incomeRepository: IIncomeRepository
+        + CreateIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    class UserService implements IUserService {
+        - userRepository: IUserRepository
+        + RegisterUser()
+        + LoginUser()
+        + UpdateProfile()
+        + ResetPassword()
+    }
+}
+
+package "Data Access Layer" {
+    interface IExpenseRepository {
+        + AddExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    interface IIncomeRepository {
+        + AddIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    interface IUserRepository {
+        + AddUser()
+        + GetUser()
+        + UpdateUser()
+        + DeleteUser()
+    }
+
+    ' Strategy Pattern for Database Selection
+    interface IDatabaseStrategy {
+        + SaveData()
+        + LoadData()
+    }
+
+    class ExpenseRepository implements IExpenseRepository {
+        - databaseStrategy: IDatabaseStrategy
+        + AddExpense()
+        + GetExpenses()
+        + UpdateExpense()
+        + DeleteExpense()
+    }
+
+    class IncomeRepository implements IIncomeRepository {
+        - databaseStrategy: IDatabaseStrategy
+        + AddIncome()
+        + GetIncomes()
+        + UpdateIncome()
+        + DeleteIncome()
+    }
+
+    class UserRepository implements IUserRepository {
+        - databaseStrategy: IDatabaseStrategy
+        + AddUser()
+        + GetUser()
+        + UpdateUser()
+        + DeleteUser()
+    }
+}
+
+package "Infrastructure Layer" {
+    ' Concrete implementation for Strategy Pattern
+    class SQLDatabaseStrategy implements IDatabaseStrategy {
+        + SaveData()
+        + LoadData()
+    }
+
+    ' Context class to dynamically select strategy
+    class DatabaseContext {
+        - strategy: IDatabaseStrategy
+        + SetStrategy(strategy: IDatabaseStrategy)
+        + ExecuteSaveData()
+        + ExecuteLoadData()
+    }
+}
+
+' Relationships between layers
+ExpenseController --> IExpenseService
+IncomeController --> IIncomeService
+UserController --> IUserService
+
+ServiceFactory --> IExpenseService
+ServiceFactory --> IIncomeService
+ServiceFactory --> IUserService
+
+ExpenseService --> IExpenseRepository
+IncomeService --> IIncomeRepository
+UserService --> IUserRepository
+
+ExpenseService --> IBudgetObserver : "AddObserver"
+
+ExpenseRepository --> IDatabaseStrategy
+IncomeRepository --> IDatabaseStrategy
+UserRepository --> IDatabaseStrategy
+
+DatabaseContext --> IDatabaseStrategy
+SQLDatabaseStrategy --> DatabaseContext
+
+@enduml
