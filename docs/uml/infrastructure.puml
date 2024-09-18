@@ -1,4 +1,4 @@
-@startuml Expense Tracker - API
+@startuml expense-tracker
 
 package "Infrastructure" {
     !include data.puml
