@@ -1,7 +1,7 @@
 @startuml Presentation
 
 package "Presentation Layer" {
-    class ExpenseController implements ControllerBase {
+    class ExpenseController {
         - expenseService: IExpenseService
         + CreateExpense()
         + GetExpenses()
@@ -9,7 +9,7 @@ package "Presentation Layer" {
         + DeleteExpense()
     }
 
-    class IncomeController implements ControllerBase {
+    class IncomeController {
         - incomeService: IIncomeService
         + CreateIncome()
         + GetIncomes()
@@ -17,7 +17,7 @@ package "Presentation Layer" {
         + DeleteIncome()
     }
 
-    class UserController implements ControllerBase {
+    class UserController {
         - userService: IUserService
         + RegisterUser()
         + LoginUser()
