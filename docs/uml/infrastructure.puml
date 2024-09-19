@@ -42,12 +42,13 @@ package "Infrastructure" {
 
     ExpenseService --> IBudgetObserver : "AddObserver"
 
-    ExpenseRepository --> IDatabaseStrategy
-    IncomeRepository --> IDatabaseStrategy
-    UserRepository --> IDatabaseStrategy
+    UserRepository --> IDbConnectionFactory
+    ExpenseRepository --> IDbConnectionFactory
+    IncomeRepository --> IDbConnectionFactory
 
-    DatabaseContext --> IDatabaseStrategy
-    SQLDatabaseStrategy --> DatabaseContext
+    NpgsqlConnectionFactory ..|> IDbConnectionFactory
+
+    UnitOfWork ..|> IUnitOfWork
 }
 
 @enduml

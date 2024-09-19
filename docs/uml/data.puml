@@ -3,10 +3,13 @@
 package "Data" {
     interface IDbConnectionFactory {
         + CreateConnection() : Task<IDbConnection>
+        + MakeTransaction() : Task<IDbTransaction>
     }
 
     class NpgsqlConnectionFactory {
         - _connectionString : string
+        - _connection : Task<IDbConnection>
+        - _transaction : Task<IDbTransaction>
     }
 
     class DbConstants {
@@ -15,6 +18,20 @@ package "Data" {
 
     class DbInitializer {
         + Initialize(string connectionString) : void
+    }
+
+    interface IUnitOfWork {
+        + BeginTransaction() : void
+        + Commit() : void
+        + CommitAndCloseConnection() : void
+        + RollBack() : void
+    }
+
+    class UnitOfWork {
+        - _npgsqlConnectionFactory : NpgsqlConnectionFactory
+        + userRepository : IUserRepository
+        + expenseRepository : IExpenseRepository
+        + incomeRepository : IIncomeRepository
     }
 }
 
