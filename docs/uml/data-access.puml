@@ -9,29 +9,29 @@ package "Data Access Layer" {
         + Delele(T id) : Task<bool>
     }
 
-    interface IUserRepository implements IBaseRepository {
+    interface IUserRepository {
         + ResetPassword(int code) : Task<User>
     }
     
-    interface IExpenseRepository implements IBaseRepository {
+    interface IExpenseRepository {
         + GetExpenseByCategory(string category) : Task<IList<Expense>>
         + GetExpenseByDate(DateTime startDate, DateTime endDate) : Task<int>
     }
 
-    interface IIncomeRepository implements IBaseRepository {
+    interface IIncomeRepository {
         + CreateIncomeBySource(string source) : Task<IList<Income>>
     }
 
-    class UserRepository implements IUserRepository {
-        - databaseStrategy: IDatabaseStrategy
+    class UserRepository {
+        - _databaseStrategy: IDatabaseStrategy
     }
 
-    class ExpenseRepository implements IExpenseRepository {
-        - databaseStrategy: IDatabaseStrategy
+    class ExpenseRepository {
+        - _databaseStrategy: IDatabaseStrategy
     }
 
-    class IncomeRepository implements IIncomeRepository {
-        - databaseStrategy: IDatabaseStrategy
+    class IncomeRepository {
+        - _databaseStrategy: IDatabaseStrategy
     }
 
     package "Entities" {
@@ -55,7 +55,6 @@ package "Data Access Layer" {
             + Date : DateTime
             + CreatedAt : DateTime
             + UserId : Guid
-            + Users : IList<Users>
         }
 
         class Income {
@@ -65,7 +64,6 @@ package "Data Access Layer" {
             + Date : DateTime
             + CreatedAt : DateTime
             + UserId : Guid
-            + Users : IList<Users>
         }
 
         class Budget {
@@ -73,7 +71,6 @@ package "Data Access Layer" {
             + BudgetAmount : decimal
             + Month : DateTime
             + UserId : Guid
-            + Users : IList<Users>
         }
 
         class Goal {
@@ -83,7 +80,6 @@ package "Data Access Layer" {
             + CurrentAmount : decimal
             + CreatedAt : DateTime
             + UserId : Guid
-            + Users : IList<Users>
         }
     }
 }
