@@ -2,18 +2,20 @@
 
 package "Business Logic Layer" {
     package "Services Layer" {
-            interface IExpenseService {
-            + CreateExpense()
-            + GetExpenses()
-            + UpdateExpense()
-            + DeleteExpense()
+        interface IExpenseService {
+            + GetAllExpenses() : Task<IList<ExpenseResponse>>
+            + GetExpenseById(Guid expenseId) : Task<ExpenseResponse>
+            + CreateExpense(ExpenseCreateRequest expense) : Task<int>
+            + UpdateExpense(ExpenseUpdateRequest expense) : Task<int>
+            + DeleteExpense(Guid expenseId) : Task<bool>
         }
 
-            interface IIncomeService {
-            + CreateIncome()
-            + GetIncomes()
-            + UpdateIncome()
-            + DeleteIncome()
+        interface IIncomeService {
+            + GetAllIncomes() : Task<IList<IncomeResponse>>
+            + GetIncomeById(Guid incomeId) : Task<IncomeResponse>
+            + CreateIncome(IncomeCreateRequest income) : Task<int>
+            + UpdateIncome(IncomeUpdateRequest income) : Task<int>
+            + DeleteIncome(Guid incomeId) : Task<bool>
         }
 
         interface IUserService {
@@ -25,50 +27,32 @@ package "Business Logic Layer" {
 
         ' Applying Factory Pattern for Services
         interface IServiceFactory {
-            + CreateExpenseService(): IExpenseService
-            + CreateIncomeService(): IIncomeService
-            + CreateUserService(): IUserService
-        }
-
-        class ServiceFactory implements IServiceFactory {
-            + CreateExpenseService() : IExpenseService
-            + CreateIncomeService() : IIncomeService
-            + CreateUserService() : IUserService
+            + CreateExpenseService(): Task<IExpenseService>
+            + CreateIncomeService(): Task<IIncomeService>
+            + CreateUserService(): Task<IUserService>
         }
 
         ' Observer pattern to notify about budget thresholds
         interface IBudgetObserver {
             + NotifyBudgetExceeded()
         }
-    }
 
-    package "Logic Layer" {
-        class ExpenseService implements IExpenseService {
-            - expenseRepository: IExpenseRepository
-            - observers: List<IBudgetObserver>
-            + AddObserver(observer: IBudgetObserver)
-            + RemoveObserver(observer: IBudgetObserver)
-            + CreateExpense()
-            + GetExpenses()
-            + UpdateExpense()
-            + DeleteExpense()
-            + NotifyBudgetExceeded()
-        }
+        package "Logic Layer" {
+            class ExpenseService {
+                - _expenseRepository: IExpenseRepository
+                - observers: List<IBudgetObserver>
+                + AddObserver(observer: IBudgetObserver)
+                + RemoveObserver(observer: IBudgetObserver)
+                + NotifyBudgetExceeded()
+            }
 
-        class IncomeService implements IIncomeService {
-            - incomeRepository: IIncomeRepository
-            + CreateIncome()
-            + GetIncomes()
-            + UpdateIncome()
-            + DeleteIncome()
-        }
+            class IncomeService {
+                - _incomeRepository: IIncomeRepository
+            }
 
-        class UserService implements IUserService {
-            - userRepository: IUserRepository
-            + RegisterUser()
-            + LoginUser()
-            + UpdateProfile()
-            + ResetPassword()
+            class UserService {
+                - _userRepository: IUserRepository
+            }
         }
     }
 
