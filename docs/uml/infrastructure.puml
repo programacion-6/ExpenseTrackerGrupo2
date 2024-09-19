@@ -12,17 +12,33 @@ package "Infrastructure" {
     IncomeController --> IIncomeService
     UserController --> IUserService
 
-    ServiceFactory --> IExpenseService
-    ServiceFactory --> IIncomeService
-    ServiceFactory --> IUserService
+    IExpenseService ..> ExpenseResponse
+    IExpenseService ..> ExpenseCreateRequest
+    IExpenseService ..> ExpenseUpdateRequest
 
-    ExpenseService --> IExpenseRepository
-    IncomeService --> IIncomeRepository
-    UserService --> IUserRepository
+    IIncomeService ..> IncomeResponse
+    IIncomeService ..> IncomeCreateRequest
+    IIncomeService ..> IncomeUpdateRequest
 
-    ExpenseRepository --> Expense
-    IncomeRepository --> Income
-    UserRepository --> User
+    ExpenseService ..> IExpenseRepository
+    IncomeService ..> IIncomeRepository
+    UserService ..> IUserRepository
+
+    ExpenseService ..|> IExpenseService
+    IncomeService ..|> IIncomeService
+    UserService ..|> IUserService
+
+    UserRepository ..|> IUserRepository
+    ExpenseRepository ..|> IExpenseRepository
+    IncomeRepository ..|> IIncomeRepository
+
+    IUserRepository ..> User
+    IExpenseRepository ..> Expense
+    IIncomeRepository ..> Income
+
+    IUserRepository ..|> IBaseRepository
+    IExpenseRepository ..|> IBaseRepository
+    IIncomeRepository ..|> IBaseRepository
 
     ExpenseService --> IBudgetObserver : "AddObserver"
 
