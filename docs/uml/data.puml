@@ -1,23 +1,20 @@
 @startuml Relational Database
 
 package "Data" {
-    interface IDatabaseStrategy {
-        + SaveData()
-        + LoadData()
+    interface IDbConnectionFactory {
+        + CreateConnection() : Task<IDbConnection>
     }
 
-    ' Concrete implementation for Strategy Pattern
-    class SQLDatabaseStrategy implements IDatabaseStrategy {
-        + SaveData()
-        + LoadData()
+    class NpgsqlConnectionFactory {
+        - _connectionString : string
     }
 
-    ' Context class to dynamically select strategy
-    class DatabaseContext {
-        - strategy: IDatabaseStrategy
-        + SetStrategy(strategy: IDatabaseStrategy)
-        + ExecuteSaveData()
-        + ExecuteLoadData()
+    class DbConstants {
+        + DefaultConnectionPath : string
+    }
+
+    class DbInitializer {
+        + Initialize(string connectionString) : void
     }
 }
 
