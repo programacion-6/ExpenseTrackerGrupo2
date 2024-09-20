@@ -8,5 +8,4 @@ public class Income
     public required DateTime Date { get; set; }
     private DateTime CreatedAt { get; set; }
     private Guid UserId { get; set; }
-
 }

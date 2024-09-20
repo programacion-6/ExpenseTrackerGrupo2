@@ -6,5 +6,4 @@ public class Budget
     public required decimal BudgetAmount { get; set; }
     public required DateTime Month { get; set; }
     public Guid UserId { get; set; }
-
 }

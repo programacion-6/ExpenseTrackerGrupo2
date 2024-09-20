@@ -9,5 +9,4 @@ public class Expense
     public required DateTime Date;
     public DateTime CreatedAt;
     public Guid UserId { get; set; }
-
 }
