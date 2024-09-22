@@ -1,5 +1,3 @@
-name: expensetrackergrupotwo
-
 services:
   webapp:
     container_name: expense-tracker-api
@@ -26,6 +24,8 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./src/ExpenseTrackerGrupo2/Persistence/Database/Scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U expenseTrackerGrupoTwo -d expensetrackergrupo2"]
       interval: 5s
