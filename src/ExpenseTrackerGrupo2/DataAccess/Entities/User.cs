@@ -2,24 +2,13 @@ namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Entities;
 
 public class User
 {
-    private Guid _id;
-    private DateTime _createdAt;
-
-    public required Guid Id
-    {
-        get => _id;
-        set => _id = value;
-    }
-
-    public required string Name { get; set; }
-
+    public Guid Id { get; init; } = Guid.NewGuid();
+    public required string AccountName { get; set; }
     public required string Email { get; set; }
-
-    public required string PasswordHash { get; set; }
-
-    public required DateTime CreatedAt
-    {
-        get => _createdAt;
-        set => _createdAt = value;
-    }
+    public required string Password { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public required IList<Expense> Expenses { get; set; }
+    public required IList<Income> Incomes { get; set; }
+    public required IList<Budget> Budgets { get; set; }
+    public required IList<Goal> Goals { get; set; }
 }
