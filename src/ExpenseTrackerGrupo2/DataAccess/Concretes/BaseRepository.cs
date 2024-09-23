@@ -1,7 +1,7 @@
 using Dapper;
 using ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.Data;
 
-namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Layer;
+namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Concretes;
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
     protected readonly IDbConnectionFactory _dbConnectionFactory;

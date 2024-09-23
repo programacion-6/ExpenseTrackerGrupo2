@@ -2,7 +2,7 @@ using Dapper;
 using ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.Data;
 using ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Entities;
 
-namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Layer;
+namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Concretes;
 
 public class ExpenseRepository : BaseRepository<Expense>, IExpenseRepository
 {
