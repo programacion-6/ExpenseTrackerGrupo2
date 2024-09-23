@@ -4,18 +4,18 @@ namespace ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Users;
 
 public record UserCreateRequest
 (
-    string Name,
+    string AccountName,
     string Email,
-    string PasswordHash
+    string Password
 )
 { 
     public User ToModel()
     {
         return new User
         {
-            Name = Name,
+            AccountName = AccountName,
             Email = Email,
-            PasswordHash = PasswordHash
+            Password = Password
         };
     }
 }
