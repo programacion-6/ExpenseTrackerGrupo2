@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS expenses (
     category VARCHAR(100),
     expense_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS incomes (
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS incomes (
     source VARCHAR(100),
     income_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS budgets (
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS budgets (
     user_id UUID NOT NULL,
     month INT NOT NULL,
     budget_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS goals (
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS goals (
     deadline DATE NOT NULL,
     current_amount DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 INSERT INTO users (user_id, name, email, password_hash, created_at) 
