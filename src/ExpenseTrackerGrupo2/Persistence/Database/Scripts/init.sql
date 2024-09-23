@@ -11,9 +11,6 @@ CREATE TABLE IF NOT EXISTS expenses (
     user_id UUID NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     description VARCHAR(255),
-    source VARCHAR(100),
-    month INT NOT NULL,
-    goal_amount DECIMAL(10, 2),
     category VARCHAR(100),
     expense_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -24,6 +21,7 @@ CREATE TABLE IF NOT EXISTS incomes (
     income_id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
+    source VARCHAR(100),
     income_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
@@ -32,46 +30,47 @@ CREATE TABLE IF NOT EXISTS incomes (
 CREATE TABLE IF NOT EXISTS budgets (
     budget_id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
+    month INT NOT NULL,
     budget_amount DECIMAL(10, 2) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS goals (
     goal_id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
+    goal_amount DECIMAL(10, 2),
     deadline DATE NOT NULL,
     current_amount DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-INSERT INTO users (name, email, password_hash, created_at) 
+INSERT INTO users (user_id, name, email, password_hash, created_at) 
 VALUES 
-('Juan Pérez', 'juan.perez@gmail.com', 'hashed_password_juan', CURRENT_TIMESTAMP),
-('Ana Gómez', 'ana.gomez@gmail.com', 'hashed_password_ana', CURRENT_TIMESTAMP),
-('Luis Martínez', 'luis.martinez@gmail.com', 'hashed_password_luis', CURRENT_TIMESTAMP);
+('550e8400-e29b-41d4-a716-446655440000', 'Juan Pérez', 'juan.perez@gmail.com', 'hashed_password_juan', CURRENT_TIMESTAMP),
+('550e8400-e29b-41d4-a716-446655440001', 'Ana Gómez', 'ana.gomez@gmail.com', 'hashed_password_ana', CURRENT_TIMESTAMP),
+('550e8400-e29b-41d4-a716-446655440002', 'Luis Martínez', 'luis.martinez@gmail.com', 'hashed_password_luis', CURRENT_TIMESTAMP);
 
-INSERT INTO expenses (user_id, amount, description, source, month, goal_amount, category, expense_date, created_at) 
+INSERT INTO expenses (expense_id, user_id, amount, description, category, expense_date, created_at) 
 VALUES 
-('1', 100.50, 'Compra de supermercado', 'Tarjeta de crédito', 9, 200.00, 'Comida', '2024-09-15', CURRENT_TIMESTAMP),
-('2', 50.00, 'Pago de servicios públicos', 'Transferencia bancaria', 9, 100.00, 'Servicios', '2024-09-14', CURRENT_TIMESTAMP),
-('3', 200.00, 'Compra de ropa', 'Efectivo', 9, 300.00, 'Ropa', '2024-09-13', CURRENT_TIMESTAMP);
+('650e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440000', 100.50, 'Compra de supermercado', 'Comida', '2024-09-15', CURRENT_TIMESTAMP),
+('650e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440001', 50.00, 'Pago de servicios públicos', 'Servicios', '2024-09-14', CURRENT_TIMESTAMP),
+('650e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440002', 200.00, 'Compra de ropa', 'Ropa', '2024-09-13', CURRENT_TIMESTAMP);
 
-INSERT INTO incomes (user_id, amount, income_date, created_at) 
+INSERT INTO incomes (income_id, user_id, amount, source, income_date, created_at) 
 VALUES 
-('1', 1500.00, '2024-09-01', CURRENT_TIMESTAMP),
-('2', 1800.00, '2024-09-05', CURRENT_TIMESTAMP),
-('3', 1200.00, '2024-09-10', CURRENT_TIMESTAMP);
+('750e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440000', 1500.00, 'Salario', '2024-09-01', CURRENT_TIMESTAMP),
+('750e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440001', 1800.00, 'Salario', '2024-09-05', CURRENT_TIMESTAMP),
+('750e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440002', 1200.00, 'Salario', '2024-09-10', CURRENT_TIMESTAMP);
 
-INSERT INTO budgets (user_id, budget_amount, created_at) 
+INSERT INTO budgets (budget_id, user_id, month, budget_amount) 
 VALUES 
-('1', 1200.00, CURRENT_TIMESTAMP),
-('2', 1500.00, CURRENT_TIMESTAMP),
-('3', 1000.00, CURRENT_TIMESTAMP);
+('850e8400-e29b-41d4-a716-446655440009', '550e8400-e29b-41d4-a716-446655440000', 9, 1200.00),
+('850e8400-e29b-41d4-a716-446655440010', '550e8400-e29b-41d4-a716-446655440001', 9, 1500.00),
+('850e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440002', 9, 1000.00);
 
-INSERT INTO goals (user_id, deadline, current_amount, created_at) 
+INSERT INTO goals (goal_id, user_id, goal_amount, deadline, current_amount, created_at) 
 VALUES 
-('1', '2024-12-31', 500.00, CURRENT_TIMESTAMP),
-('2', '2025-06-30', 300.00, CURRENT_TIMESTAMP),
-('3', '2025-03-31', 700.00, CURRENT_TIMESTAMP);
+('950e8400-e29b-41d4-a716-446655440012', '550e8400-e29b-41d4-a716-446655440000', 1000.00, '2024-12-31', 500.00, CURRENT_TIMESTAMP),
+('950e8400-e29b-41d4-a716-446655440013', '550e8400-e29b-41d4-a716-446655440001', 2000.00, '2025-06-30', 300.00, CURRENT_TIMESTAMP),
+('950e8400-e29b-41d4-a716-446655440014', '550e8400-e29b-41d4-a716-446655440002', 1500.00, '2025-03-31', 700.00, CURRENT_TIMESTAMP);
