@@ -25,13 +25,6 @@ package "Business Logic Layer" {
             + ResetPassword()
         }
 
-        ' Applying Factory Pattern for Services
-        interface IServiceFactory {
-            + CreateExpenseService(): Task<IExpenseService>
-            + CreateIncomeService(): Task<IIncomeService>
-            + CreateUserService(): Task<IUserService>
-        }
-
         ' Observer pattern to notify about budget thresholds
         interface IBudgetObserver {
             + NotifyBudgetExceeded()
@@ -61,12 +54,14 @@ package "Business Logic Layer" {
             - AccountName : string
             - Email : string
             - Password : string
+            + ToDomain() : User
         }
 
         class UserUpdateRequest << (R, #FFAAAA) >> {
             - AccountName : string
             - Email : string
             - Password : string
+            + ToDomain() : User
         }
 
         class ExpenseCreateRequest << (R, #FFAAAA) >> {
@@ -74,6 +69,7 @@ package "Business Logic Layer" {
             - Description : string
             - Category : string
             - Date : DateTime
+            + ToDomain() : Expense
         }
 
         class ExpenseUpdateRequest << (R, #FFAAAA) >> {
@@ -81,40 +77,47 @@ package "Business Logic Layer" {
             - Description : string
             - Category : string
             - Date : DateTime
+            + ToDomain() : Expense
         }
 
         class IncomeCreateRequest << (R, #FFAAAA) >> {
             - Amount : decimal
             - Source : string
             - Date : DateTime
+            + ToDomain() : Income
         }
 
         class IncomeUpdateRequest << (R, #FFAAAA) >> {
             - Amount : decimal
             - Source : string
             - Date : DateTime
+            + ToDomain() : Income
         }
 
         class BudgetCreateRequest << (R, #FFAAAA) >> {
             - BudgetAmount : decimal 
             - Month : DateTime
+            + ToDomain() : Budget
         }
 
         class BudgetUpdateRequest << (R, #FFAAAA) >> {
             - BudgetAmount : decimal 
             - Month : DateTime
+            + ToDomain() : Budget
         }
 
         class GoalCreateRequest << (R, #FFAAAA) >> {
             - GoalAmount : decimal
             - Deadline : DateTime
             - CurrentAmount : decimal
+            + ToDomain() : Goal
         }
 
         class GoalUpdateRequest << (R, #FFAAAA) >> {
             - GoalAmount : decimal
             - Deadline : DateTime
             - CurrentAmount : decimal
+            + ToDomain() : Goal
         }
     }
 
@@ -123,6 +126,7 @@ package "Business Logic Layer" {
             - AccountName : string
             - Email : string
             - Password : string
+            + {static} FromDomain(User user) : UserResponse
         }
 
         class ExpenseResponse << (R, #FFAAAA) >> {
@@ -130,23 +134,27 @@ package "Business Logic Layer" {
             - Description : string
             - Category : string
             - Date : DateTime
+            + {static} FromDomain(Expense expense) : ExpenseResponse
         }
 
         class IncomeResponse << (R, #FFAAAA) >> {
             - Amount : decimal
             - Source : string
             - Date : DateTime
+            + {static} FromDomain(Income income) : IncomeResponse
         }
 
         class BudgetResponse << (R, #FFAAAA) >> {
             - BudgetAmount : decimal 
             - Month : DateTime
+            + {static} FromDomain(Budget budget) : BudgetResponse
         }
 
         class GoalResponse << (R, #FFAAAA) >> {
             - GoalAmount : decimal
             - Deadline : DateTime
             - CurrentAmount : decimal
+            + {static} FromDomain(Goal goal) : GoalResponse
         }
     }
 }
