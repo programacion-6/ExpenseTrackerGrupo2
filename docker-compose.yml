@@ -1,3 +1,5 @@
+name: expensetrackergrupotwo
+
 services:
   webapp:
     container_name: expense-tracker-api
