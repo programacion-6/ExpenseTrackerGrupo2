@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS incomes (
 CREATE TABLE IF NOT EXISTS budgets (
     budget_id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
-    month INT NOT NULL,
+    month VARCHAR(7) NOT NULL,
     budget_amount DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
