@@ -6,7 +6,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 {
     public UserRepository(IDbConnectionFactory dbConnectionFactory) : base(dbConnectionFactory) {}
 
-    public Task<User> ResetPasswordAsync(int code)
+    public Task<User> ResetPassword(int code)
     {
         throw new NotImplementedException();
     }

@@ -4,7 +4,7 @@ using ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.Data;
 namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Layer;
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
-    private readonly IDbConnectionFactory _dbConnectionFactory;
+    protected readonly IDbConnectionFactory _dbConnectionFactory;
 
     public BaseRepository(IDbConnectionFactory IDbConnectionFactory)
     {
