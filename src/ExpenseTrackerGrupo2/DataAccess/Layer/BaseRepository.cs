@@ -20,7 +20,8 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     public async Task<T> GetById(Guid id)
     {
         var connection = await _dbConnectionFactory.CreateConnection();
-        return await connection.QuerySingleOrDefaultAsync<T>("SELECT * FROM " + typeof(T).Name + " WHERE Id = @Id", new { Id = id });
+        var result = await connection.QuerySingleOrDefaultAsync<T>("SELECT * FROM " + typeof(T).Name + " WHERE Id = @Id", new { Id = id });
+        return result;
     }
 
     public async Task<int> Create(T entity)
