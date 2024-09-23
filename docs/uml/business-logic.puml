@@ -2,18 +2,20 @@
 
 package "Business Logic Layer" {
     package "Services Layer" {
-            interface IExpenseService {
-            + CreateExpense()
-            + GetExpenses()
-            + UpdateExpense()
-            + DeleteExpense()
+        interface IExpenseService {
+            + GetAllExpenses() : Task<IList<ExpenseResponse>>
+            + GetExpenseById(Guid expenseId) : Task<ExpenseResponse>
+            + CreateExpense(ExpenseCreateRequest expense) : Task<int>
+            + UpdateExpense(ExpenseUpdateRequest expense) : Task<int>
+            + DeleteExpense(Guid expenseId) : Task<bool>
         }
 
-            interface IIncomeService {
-            + CreateIncome()
-            + GetIncomes()
-            + UpdateIncome()
-            + DeleteIncome()
+        interface IIncomeService {
+            + GetAllIncomes() : Task<IList<IncomeResponse>>
+            + GetIncomeById(Guid incomeId) : Task<IncomeResponse>
+            + CreateIncome(IncomeCreateRequest income) : Task<int>
+            + UpdateIncome(IncomeUpdateRequest income) : Task<int>
+            + DeleteIncome(Guid incomeId) : Task<bool>
         }
 
         interface IUserService {
@@ -23,89 +25,136 @@ package "Business Logic Layer" {
             + ResetPassword()
         }
 
-        ' Applying Factory Pattern for Services
-        interface IServiceFactory {
-            + CreateExpenseService(): IExpenseService
-            + CreateIncomeService(): IIncomeService
-            + CreateUserService(): IUserService
-        }
-
-        class ServiceFactory implements IServiceFactory {
-            + CreateExpenseService() : IExpenseService
-            + CreateIncomeService() : IIncomeService
-            + CreateUserService() : IUserService
-        }
-
         ' Observer pattern to notify about budget thresholds
         interface IBudgetObserver {
             + NotifyBudgetExceeded()
         }
-    }
 
-    package "Logic Layer" {
-        class ExpenseService implements IExpenseService {
-            - expenseRepository: IExpenseRepository
-            - observers: List<IBudgetObserver>
-            + AddObserver(observer: IBudgetObserver)
-            + RemoveObserver(observer: IBudgetObserver)
-            + CreateExpense()
-            + GetExpenses()
-            + UpdateExpense()
-            + DeleteExpense()
-            + NotifyBudgetExceeded()
-        }
+        package "Logic Layer" {
+            class ExpenseService {
+                - _expenseRepository: IExpenseRepository
+                - observers: List<IBudgetObserver>
+                + AddObserver(observer: IBudgetObserver)
+                + RemoveObserver(observer: IBudgetObserver)
+                + NotifyBudgetExceeded()
+            }
 
-        class IncomeService implements IIncomeService {
-            - incomeRepository: IIncomeRepository
-            + CreateIncome()
-            + GetIncomes()
-            + UpdateIncome()
-            + DeleteIncome()
-        }
+            class IncomeService {
+                - _incomeRepository: IIncomeRepository
+            }
 
-        class UserService implements IUserService {
-            - userRepository: IUserRepository
-            + RegisterUser()
-            + LoginUser()
-            + UpdateProfile()
-            + ResetPassword()
+            class UserService {
+                - _userRepository: IUserRepository
+            }
         }
     }
 
     package "DTO Adapters" {
-        class UserDTO {
-            + Id : Guid
-            + AccountName : string
-            + Email : string
-            + Password : string
+        class UserCreateRequest << (R, #FFAAAA) >> {
+            - AccountName : string
+            - Email : string
+            - Password : string
+            + ToDomain() : User
         }
 
-        class ExpenseDTO {
-            + Id : Guid
-            + Amount : decimal
-            + Description : string
-            + Category : string
-            + Date : DateTime
+        class UserUpdateRequest << (R, #FFAAAA) >> {
+            - AccountName : string
+            - Email : string
+            - Password : string
+            + ToDomain() : User
         }
 
-        class IncomeDTO {
-            + Id : Guid
-            + Amount : decimal
-            + Source : string
-            + Date : DateTime
+        class ExpenseCreateRequest << (R, #FFAAAA) >> {
+            - Amount : decimal
+            - Description : string
+            - Category : string
+            - Date : DateTime
+            + ToDomain() : Expense
         }
 
-        class BudgetDTO {
-            + Id : Guid
-            + BudgetAmount : decimal
-            + Month : DateTime
+        class ExpenseUpdateRequest << (R, #FFAAAA) >> {
+            - Amount : decimal
+            - Description : string
+            - Category : string
+            - Date : DateTime
+            + ToDomain() : Expense
         }
 
-        class GoalDTO {
-            + Id : Guid
-            + GoalAmount : decimal
-            + Deadline : DateTime
-            + CurrentAmount : decimal
+        class IncomeCreateRequest << (R, #FFAAAA) >> {
+            - Amount : decimal
+            - Source : string
+            - Date : DateTime
+            + ToDomain() : Income
+        }
+
+        class IncomeUpdateRequest << (R, #FFAAAA) >> {
+            - Amount : decimal
+            - Source : string
+            - Date : DateTime
+            + ToDomain() : Income
+        }
+
+        class BudgetCreateRequest << (R, #FFAAAA) >> {
+            - BudgetAmount : decimal 
+            - Month : DateTime
+            + ToDomain() : Budget
+        }
+
+        class BudgetUpdateRequest << (R, #FFAAAA) >> {
+            - BudgetAmount : decimal 
+            - Month : DateTime
+            + ToDomain() : Budget
+        }
+
+        class GoalCreateRequest << (R, #FFAAAA) >> {
+            - GoalAmount : decimal
+            - Deadline : DateTime
+            - CurrentAmount : decimal
+            + ToDomain() : Goal
+        }
+
+        class GoalUpdateRequest << (R, #FFAAAA) >> {
+            - GoalAmount : decimal
+            - Deadline : DateTime
+            - CurrentAmount : decimal
+            + ToDomain() : Goal
+        }
+    }
+
+    package "VO Adapters" {
+        class UserResponse << (R, #FFAAAA) >> {
+            - AccountName : string
+            - Email : string
+            - Password : string
+            + {static} FromDomain(User user) : UserResponse
+        }
+
+        class ExpenseResponse << (R, #FFAAAA) >> {
+            - Amount : decimal
+            - Description : string
+            - Category : string
+            - Date : DateTime
+            + {static} FromDomain(Expense expense) : ExpenseResponse
+        }
+
+        class IncomeResponse << (R, #FFAAAA) >> {
+            - Amount : decimal
+            - Source : string
+            - Date : DateTime
+            + {static} FromDomain(Income income) : IncomeResponse
+        }
+
+        class BudgetResponse << (R, #FFAAAA) >> {
+            - BudgetAmount : decimal 
+            - Month : DateTime
+            + {static} FromDomain(Budget budget) : BudgetResponse
+        }
+
+        class GoalResponse << (R, #FFAAAA) >> {
+            - GoalAmount : decimal
+            - Deadline : DateTime
+            - CurrentAmount : decimal
+            + {static} FromDomain(Goal goal) : GoalResponse
         }
     }
 }
