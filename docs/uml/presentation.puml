@@ -1,28 +1,30 @@
 @startuml Presentation
 
 package "Presentation Layer" {
-    class ExpenseController implements ControllerBase {
+    class ExpenseController {
         - expenseService: IExpenseService
-        + CreateExpense()
-        + GetExpenses()
-        + UpdateExpense()
-        + DeleteExpense()
+        + GetExpenses() : Task<IActionResult>
+        + GetExpenseById(Guid expenseId) : Task<IActionResult>
+        + CreateExpense(UserCreateRequest user) : Task<IActionResult>
+        + UpdateExpense(UserUpdateRequest user) : Task<IActionResult>
+        + DeleteExpense(Guid expenseId) : Task<IActionResult>
     }
 
-    class IncomeController implements ControllerBase {
+    class IncomeController {
         - incomeService: IIncomeService
-        + CreateIncome()
-        + GetIncomes()
-        + UpdateIncome()
-        + DeleteIncome()
+        + GetIncomes() : Task<IActionResult>
+        + GetIncomeById(Guid expenseId) : Task<IActionResult>
+        + CreateIncome(ExpenseCreateRequest expense) : Task<IActionResult>
+        + UpdateIncome(ExpenseUpdateRequest expense) : Task<IActionResult>
+        + DeleteIncome(Guid expenseId) : Task<IActionResult>
     }
 
-    class UserController implements ControllerBase {
+    class UserController {
         - userService: IUserService
-        + RegisterUser()
-        + LoginUser()
-        + UpdateProfile()
-        + ResetPassword()
+        + RegisterUser() : Task<IActionResult>
+        + LoginUser() : Task<IActionResult>
+        + UpdateProfile() : Task<IActionResult>
+        + ResetPassword() : Task<IActionResult>
     }
 }
 
