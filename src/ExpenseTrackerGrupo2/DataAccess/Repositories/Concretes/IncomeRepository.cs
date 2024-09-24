@@ -10,7 +10,7 @@ public class IncomeRepository : BaseRepository<Income>, IIncomeRepository
     public async Task<IList<Income>> GetIncomeBySource(string source)
     {
         using var connection = await _dbConnectionFactory.CreateConnection();
-        var query = "SELECT * FROM Incomes WHERE Source = @Source";
+        var query = "SELECT * FROM incomes WHERE source = @Source";
         var incomes = await connection.QueryAsync<Income>(query, new { Source = source });
         return incomes.ToList();
     }
