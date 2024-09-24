@@ -1,7 +1,8 @@
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.Utils;
+namespace ExpenseTrackerGrupo2.Utils;
+
 public static class StringUtils
 {
     public static string ToSnakeCase(string input)

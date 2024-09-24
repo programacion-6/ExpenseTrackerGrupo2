@@ -1,8 +1,10 @@
 using Dapper;
-using ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.Data;
-using ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Entities;
 
-namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Concretes;
+using ExpenseTrackerGrupo2.Persistence.Database;
+using ExpenseTrackerGrupo2.DataAccess.Entities;
+
+namespace ExpenseTrackerGrupo2.DataAccess.Concretes;
+
 public class IncomeRepository : BaseRepository<Income>, IIncomeRepository
 {
     public IncomeRepository(IDbConnectionFactory dbConnectionFactory) : base(dbConnectionFactory) { }

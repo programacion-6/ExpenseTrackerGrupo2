@@ -1,4 +1,4 @@
-namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Entities;
+namespace ExpenseTrackerGrupo2.DataAccess.Entities;
 
 public class Budget
 {
@@ -6,5 +6,4 @@ public class Budget
     public required decimal BudgetAmount { get; set; }
     public required DateTime Month { get; set; }
     public Guid UserId { get; set; }
-
 }

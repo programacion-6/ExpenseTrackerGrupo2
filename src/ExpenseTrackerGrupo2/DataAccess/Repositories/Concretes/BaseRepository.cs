@@ -1,9 +1,10 @@
 using System.Reflection;
 using Dapper;
-using ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.Data;
-using ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.Utils;
+using ExpenseTrackerGrupo2.Persistence.Database;
+using ExpenseTrackerGrupo2.Utils;
 
-namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Concretes;
+namespace ExpenseTrackerGrupo2.DataAccess.Concretes;
+
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
     protected readonly IDbConnectionFactory _dbConnectionFactory;

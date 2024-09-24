@@ -1,4 +1,4 @@
-namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Entities;
+namespace ExpenseTrackerGrupo2.DataAccess.Entities;
 
 public class Expense
 {
@@ -9,5 +9,4 @@ public class Expense
     public required DateTime Date;
     public DateTime CreatedAt;
     public Guid UserId { get; set; }
-
 }
