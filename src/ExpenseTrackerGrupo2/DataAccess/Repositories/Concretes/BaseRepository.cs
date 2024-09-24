@@ -13,24 +13,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         _dbConnectionFactory = dbConnectionFactory;
     }
 
-    private string GetColumnNames()
-    {
-        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-        return string.Join(", ", properties.Select(p => StringUtils.ToSnakeCase(p.Name)));
-    }
-
-    private string GetColumnParameters()
-    {
-        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-        return string.Join(", ", properties.Select(p => "@" + StringUtils.ToSnakeCase(p.Name)));
-    }
-
-    private string GetSetClause()
-    {
-        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-        return string.Join(", ", properties.Select(p => $"{StringUtils.ToSnakeCase(p.Name)} = @{StringUtils.ToSnakeCase(p.Name)}"));
-    }
-
     public async Task<IList<T>> GetAll()
     {
         var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
@@ -50,7 +32,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
         using var connection = await _dbConnectionFactory.CreateConnection();
-        var query = $"INSERT INTO {tableName} ({GetColumnNames()}) VALUES ({GetColumnParameters()})";
+        var query = $"INSERT INTO {tableName} ({StringUtils.GetColumnNames<T>()}) VALUES ({StringUtils.GetColumnParameters<T>()})";
         return await connection.ExecuteAsync(query, entity);
     }
 
@@ -58,7 +40,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
         using var connection = await _dbConnectionFactory.CreateConnection();
-        var query = $"UPDATE {tableName} SET {GetSetClause()} WHERE {StringUtils.ToSnakeCase(typeof(T).Name)}_id = @Id";
+        var query = $"UPDATE {tableName} SET {StringUtils.GetSetClause<T>()} WHERE {StringUtils.ToSnakeCase(typeof(T).Name)}_id = @Id";
         return await connection.ExecuteAsync(query, entity);
     }
 
