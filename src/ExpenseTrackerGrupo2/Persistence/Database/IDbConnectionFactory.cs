@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.Data;
+namespace ExpenseTrackerGrupo2.Persistence.Database;
 
 public interface IDbConnectionFactory
 {

@@ -1,6 +1,7 @@
-using ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Entities;
+using ExpenseTrackerGrupo2.DataAccess.Entities;
 
-namespace ExpenseTrackerGrupo2.src.ExpenseTrackerGrupo2.DataAccess.Concretes;
+namespace ExpenseTrackerGrupo2.DataAccess.Concretes;
+
 public interface IExpenseRepository : IBaseRepository<Expense>
 {
     Task<IList<Expense>> GetExpenseByCategory(string category);
