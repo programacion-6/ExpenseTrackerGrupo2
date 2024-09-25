@@ -20,9 +20,9 @@ public class ExpenseService : IExpenseService
             var response = await _expenseRepository.Create(expenseModel);
             return response;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new Exception("An error occurred while creating the expense.", ex);
+            throw new Exception("An error occurred while creating the expense.");
         }
     }
 
@@ -33,13 +33,13 @@ public class ExpenseService : IExpenseService
             var response = await _expenseRepository.Delete(expenseId);
             return response;
         }
-        catch (KeyNotFoundException ex)
+        catch (KeyNotFoundException)
         {
-            throw new KeyNotFoundException($"Expense with ID {expenseId} not found.", ex);
+            throw new KeyNotFoundException($"Expense with ID {expenseId} not found.");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new Exception("An error occurred while deleting the expense.", ex);
+            throw new Exception("An error occurred while deleting the expense.");
         }
     }
 
@@ -50,9 +50,9 @@ public class ExpenseService : IExpenseService
             var expenses = await _expenseRepository.GetAll();
             return expenses;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new Exception("An error occurred while retrieving all expenses.", ex);
+            throw new Exception("An error occurred while retrieving all expenses.");
         }
     }
 
@@ -67,9 +67,9 @@ public class ExpenseService : IExpenseService
             }
             return expense;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new Exception("An error occurred while retrieving the expense.", ex);
+            throw new Exception("An error occurred while retrieving the expense.");
         }
     }
 
@@ -81,9 +81,9 @@ public class ExpenseService : IExpenseService
             var response = await _expenseRepository.Update(expenseModel);
             return response;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new Exception("An error occurred while updating the expense.", ex);
+            throw new Exception("An error occurred while updating the expense.");
         }
     }
 }
