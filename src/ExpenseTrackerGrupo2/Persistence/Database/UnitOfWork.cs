@@ -1,41 +1,48 @@
+using System.Data;
+
 namespace ExpenseTrackerGrupo2.Persistence.Database;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly NpgsqlConnectionFactory _npgsqlConnectionFactory;
+    private readonly IDbConnection _connection;
+    private readonly IDbTransaction _transaction;
+    private bool _isDisposed;
 
-    public UnitOfWork(NpgsqlConnectionFactory npgsqlConnectionFactory)
+    public UnitOfWork(IDbConnectionFactory connectionFactory)
     {
-        _npgsqlConnectionFactory = npgsqlConnectionFactory;
+        _connection = connectionFactory.CreateConnectionAsync().Result;
+        _transaction = _connection.BeginTransaction();
     }
 
-    private void Init()
+    public Task CommitAsync()
     {
-
+        _transaction.Commit();
+        _connection.Close();
+        return Task.CompletedTask; 
     }
 
-    public void BeginTransaction()
+    public Task RollbackAsync()
     {
-        throw new NotImplementedException();
-    }
-
-    public void Commit()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void CommitAndCloseConnection()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void RollBack()
-    {
-        throw new NotImplementedException();
+        _transaction.Rollback();
+        _connection.Close();
+        return Task.CompletedTask; 
     }
 
     public void Dispose()
     {
-        throw new NotImplementedException();
+        Dispose(true);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_isDisposed)
+        {
+            if (disposing)
+            {
+                _transaction?.Dispose();
+                _connection?.Dispose();
+            }
+            _isDisposed = true;
+        }
     }
 }

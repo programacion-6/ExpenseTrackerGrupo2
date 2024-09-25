@@ -7,7 +7,6 @@ namespace ExpenseTrackerGrupo2.Persistence.Database;
 public class NpgsqlConnectionFactory : IDbConnectionFactory
 {
     private readonly string _connectionString;
-    private IDbConnection _connection;
 
     public NpgsqlConnectionFactory(string connectionString)
     {
@@ -16,30 +15,17 @@ public class NpgsqlConnectionFactory : IDbConnectionFactory
 
     public async Task<IDbConnection> CreateConnectionAsync()
     {
-        if (_connection is null || _connection.State != ConnectionState.Open)
-        {
-            _connection = new NpgsqlConnection(_connectionString);
+        var connection = new NpgsqlConnection(_connectionString);
 
-            await ((NpgsqlConnection) _connection).OpenAsync();
-        }
-
-        return _connection;
+        await connection.OpenAsync();
+        
+        return connection;
     }
 
-    public async Task<(IDbConnection connection, IDbTransaction transaction)> MakeTransactionAsync()
+    public async Task<IDbTransaction> MakeTransactionAsync()
     {
         var connection = await CreateConnectionAsync();
-        var transaction = connection.BeginTransaction();
         
-        return (connection, transaction);
+        return connection.BeginTransaction();
     }
-
-    // public void Dispose()
-    // {
-    //     if (_connection != null || _connection.State == ConnectionState.Open)
-    //     {
-    //         _connection.Close();
-    //         _connection.Dispose();
-    //     }
-    // }
 }
