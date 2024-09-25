@@ -22,7 +22,7 @@ public class IncomeService : IIncomeServices
         }
         catch (Exception ex)
         {
-            throw new Exception("An error occurred while creating the income.", ex);
+            throw new Exception($"An error occurred while creating the income: {ex.Message}");
         }
     }
 
@@ -35,11 +35,11 @@ public class IncomeService : IIncomeServices
         }
         catch (KeyNotFoundException ex)
         {
-            throw new KeyNotFoundException($"Income with ID {incomeId} not found.", ex);
+            throw new KeyNotFoundException($"Income with ID {incomeId} not found. {ex.Message}");
         }
         catch (Exception ex)
         {
-            throw new Exception("An error occurred while deleting the income.", ex);
+            throw new Exception($"An error occurred while deleting the income: {ex.Message}");
         }
     }
 
@@ -52,7 +52,7 @@ public class IncomeService : IIncomeServices
         }
         catch (Exception ex)
         {
-            throw new Exception("An error occurred while retrieving all incomes.", ex);
+            throw new Exception($"An error occurred while retrieving all incomes: {ex.Message}");
         }
     }
 
@@ -71,7 +71,7 @@ public class IncomeService : IIncomeServices
         }
         catch (Exception ex)
         {
-            throw new Exception("An error occurred while retrieving the income.", ex);
+            throw new Exception($"An error occurred while retrieving the income: {ex.Message}");
         }
     }
 
@@ -85,7 +85,7 @@ public class IncomeService : IIncomeServices
         }
         catch (Exception ex)
         {
-            throw new Exception("An error occurred while updating the income.", ex);
+            throw new Exception($"An error occurred while updating the income: {ex.Message}");
         }
     }
 }
