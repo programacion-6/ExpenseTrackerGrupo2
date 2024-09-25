@@ -14,37 +14,78 @@ public class IncomeService : IIncomeServices
 
     public async Task<int> CreateIncome(IncomeCreateRequest income)
     {
-        var incomeModel = income.ToModel();
-        var productResponse = await _incomeRepository.Create(incomeModel);
-        return productResponse;
+        try
+        {
+            var incomeModel = income.ToModel();
+            var productResponse = await _incomeRepository.Create(incomeModel);
+            return productResponse;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while creating the income.", ex);
+        }
     }
 
     public async Task<bool> DeleteIncome(Guid incomeId)
     {
-        var result = await _incomeRepository.Delete(incomeId);
-        return result;
+        try
+        {
+            var result = await _incomeRepository.Delete(incomeId);
+            return result;
+        }
+        catch (KeyNotFoundException ex)
+        {
+            throw new KeyNotFoundException($"Income with ID {incomeId} not found.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while deleting the income.", ex);
+        }
     }
 
     public async Task<IList<Income>> GetAllIncomes()
     {
-        var incomes = await _incomeRepository.GetAll();
-        return incomes;
+        try
+        {
+            var incomes = await _incomeRepository.GetAll();
+            return incomes;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while retrieving all incomes.", ex);
+        }
     }
 
     public async Task<Income> GetIncomeById(Guid incomeId)
     {
-        var income = await _incomeRepository.GetById(incomeId);
-        if (income == null)
+        try
         {
-            throw new KeyNotFoundException($"Income with ID {incomeId} not found.");
+            var income = await _incomeRepository.GetById(incomeId);
+
+            if (income == null)
+            {
+                throw new KeyNotFoundException($"Income with ID {incomeId} not found.");
+            }
+
+            return income;
         }
-        return income;
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while retrieving the income.", ex);
+        }
     }
 
     public async Task<int> UpdateIncome(IncomeUpdateRequest income)
     {
-        var incomeModel = income.ToModel();
-        var result = await _incomeRepository.Update(incomeModel);
-        return result;
+        try
+        {
+            var incomeModel = income.ToModel();
+            var result = await _incomeRepository.Update(incomeModel);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while updating the income.", ex);
+        }
     }
 }
