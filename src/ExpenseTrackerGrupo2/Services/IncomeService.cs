@@ -3,22 +3,37 @@ using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Incomes;
 using ExpenseTrackerGrupo2.DataAccess.Concretes;
 using ExpenseTrackerGrupo2.DataAccess.Entities;
 
+using FluentValidation;
+
 public class IncomeService : IIncomeServices
 {
     private readonly IIncomeRepository _incomeRepository;
-
-    public IncomeService(IIncomeRepository incomeRepository)
+    private readonly IValidator<Income> _incomeValidator;
+    public IncomeService(IIncomeRepository incomeRepository, IValidator<Income> incomeValidator )
     {
         this._incomeRepository = incomeRepository;
+        this._incomeValidator = incomeValidator;
     }
 
-    public async Task<int> CreateIncome(IncomeCreateRequest income)
+     public async Task<int> CreateIncome(IncomeCreateRequest income)
     {
         try
         {
             var incomeModel = income.ToModel();
+            
+            var validationResult = _incomeValidator.Validate(incomeModel);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             var productResponse = await _incomeRepository.Create(incomeModel);
             return productResponse;
+        }
+        catch (ValidationException ex)
+        {
+            throw new Exception($"Validation failed: {ex.Message}");
         }
         catch (Exception ex)
         {
@@ -80,8 +95,21 @@ public class IncomeService : IIncomeServices
         try
         {
             var incomeModel = income.ToModel();
+
+            var validationResult = _incomeValidator.Validate(incomeModel);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             var result = await _incomeRepository.Update(incomeModel, id);
+
             return result;
+        }
+        catch (ValidationException ex)
+        {
+            throw new Exception($"Validation failed: {ex.Message}");
         }
         catch (Exception ex)
         {
