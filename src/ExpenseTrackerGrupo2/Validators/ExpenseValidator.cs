@@ -11,7 +11,7 @@ public class ExpenseValidator : AbstractValidator<Expense>
 
         RuleFor(expense => expense.Date)
             .NotEmpty().WithMessage("Date is required.")
-            .Must(BeAValidDate).WithMessage("Date must be in the format yyyy-mm-dd.");
+            .Must(DateValidation.Validate).WithMessage("Date must be in the format yyyy-mm-dd.");
 
         RuleFor(expense => expense.Category)
             .NotEmpty().WithMessage("Category is required.")
@@ -21,10 +21,5 @@ public class ExpenseValidator : AbstractValidator<Expense>
             .NotEmpty().WithMessage("Description is required.")
             .MaximumLength(255);
 
-    }
-
-    private bool BeAValidDate(DateTime date)
-    {
-        return date != default(DateTime);
     }
 }

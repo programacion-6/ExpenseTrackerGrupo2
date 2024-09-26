@@ -11,15 +11,11 @@ public class IncomeValidator : AbstractValidator<Income>
 
         RuleFor(income => income.Date)
             .NotEmpty().WithMessage("Date is required.")
-            .Must(BeAValidDate).WithMessage("Date must be in a valid format.");
+            .Must(DateValidation.Validate).WithMessage("Date must be in a valid format.");
 
         RuleFor(income => income.Source)
             .NotEmpty().WithMessage("Source is required.")
             .MaximumLength(100);
 
-    }
-        private bool BeAValidDate(DateTime date)
-    {
-        return date != default(DateTime);
     }
 }
