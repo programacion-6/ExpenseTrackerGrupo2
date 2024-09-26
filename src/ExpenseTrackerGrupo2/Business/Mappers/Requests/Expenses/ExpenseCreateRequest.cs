@@ -7,19 +7,21 @@ public record ExpenseCreateRequest
     decimal Amount,
     string Description,
     string Category,
-    DateTime Date
+    DateTime Date,
+    Guid UserId 
 )
 {
     public Expense ToModel()
     {
+        Console.WriteLine($"Creating Expense with Date: {Date}");
         return new Expense
         {
             expense_id = Guid.NewGuid(),
-            user_id = Guid.NewGuid(),
+            user_id = UserId,
             Amount = Amount,
             Description = Description,
             Category = Category,
-            expense_date = DateTime.UtcNow
+            expense_date = Date
         };
     }
 }

@@ -6,7 +6,7 @@ public class Expense
     public required decimal Amount { get; set; }
     public required string Description { get; set; }
     public required string Category { get; set; }
-    public required DateTime expense_date;
+    public required DateTime expense_date {get; set;}
     public DateTime CreatedAt;
     public Guid user_id { get; set; }
 }

@@ -4,7 +4,6 @@ using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Expenses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTrackerGrupo2.Controllers;
-
 [ApiController]
 [Route("api/expenses")]
 public class ExpenseController : ControllerBase
@@ -24,10 +23,14 @@ public class ExpenseController : ControllerBase
             return BadRequest(ModelState);
         }
 
+        Console.WriteLine($"Received request: {request.Amount}, {request.Description}, {request.Category}, {request.Date}");
+
         try
         {
+            Console.WriteLine($"Making Post"); 
             var result = await _expenseService.CreateExpense(request);
 
+            Console.WriteLine($"Inserting Expense: {result}"); 
             if (result > 0)
             {
                 return CreatedAtAction(nameof(GetExpenseById), request);
@@ -41,6 +44,7 @@ public class ExpenseController : ControllerBase
         }
     }
 
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetExpenseById(Guid id)
     {
@@ -51,12 +55,12 @@ public class ExpenseController : ControllerBase
                 return BadRequest("Invalid ID format.");
             }
 
-            var expenses = await _expenseService.GetExpenseById(id);
-            if (expenses == null)
+            var expense = await _expenseService.GetExpenseById(id);
+            if (expense == null)
             {
                 return NotFound($"Expense with ID {id} not found.");
             }
-            return Ok(expenses);
+            return Ok(expense);
         }
         catch (Exception ex)
         {
@@ -89,7 +93,7 @@ public class ExpenseController : ControllerBase
         }
     }
 
-     [HttpGet]
+    [HttpGet]
     public async Task<IActionResult> GetExpenses()
     {
         try
