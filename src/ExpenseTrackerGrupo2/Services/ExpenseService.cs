@@ -73,13 +73,44 @@ public class ExpenseService : IExpenseService
         }
     }
 
-    public async Task<int> UpdateExpense(ExpenseUpdateRequest expense)
+    public async Task<IList<Expense>> GetExpenses(DateTime? startDate, DateTime? endDate, string? category)
+    {
+        var expenses = await _expenseRepository.GetAll();
+
+        if (startDate.HasValue)
+        {
+            expenses = expenses.Where(e => e.Date >= startDate.Value).ToList();
+        }
+
+        if (endDate.HasValue)
+        {
+            expenses = expenses.Where(e => e.Date <= endDate.Value).ToList();
+        }
+
+        if (!string.IsNullOrEmpty(category))
+        {
+            expenses = expenses.Where(e => e.Category == category).ToList();
+        }
+
+        return expenses;
+    }
+
+    public async Task<int> UpdateExpense(Guid id, ExpenseUpdateRequest expense)
     {
         try
         {
-            var expenseModel = expense.ToModel();
-            var response = await _expenseRepository.Update(expenseModel);
-            return response;
+            var existingExpense = await _expenseRepository.GetById(id);
+
+            if (existingExpense == null)
+            {
+                throw new KeyNotFoundException($"Expense with ID {id} not found.");
+            }
+            else
+            {
+                var expenseModel = expense.ToModel();
+                var response = await _expenseRepository.Update(expenseModel);
+                return response;
+            }
         }
         catch (Exception ex)
         {
