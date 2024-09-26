@@ -8,7 +8,7 @@ public record ExpenseCreateRequest
     string Description,
     string Category,
     DateTime Date,
-    Guid UserId 
+    Guid UserId
 )
 {
     public Expense ToModel()

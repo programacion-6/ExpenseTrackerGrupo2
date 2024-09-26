@@ -112,4 +112,28 @@ public class ExpenseController : ControllerBase
             return StatusCode(500, $"An error occurred: {ex.Message}");
         }
     }
+        [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateExpense(Guid id, [FromBody] ExpenseUpdateRequest request)
+    {
+        if (id == Guid.Empty || !ModelState.IsValid)
+        {
+            return BadRequest("Invalid ID format or request data.");
+        }
+
+        try
+        {
+            var updatedExpense = await _expenseService.UpdateExpense(request);
+
+            if (updatedExpense == null)
+            {
+                return NotFound($"Expense with ID {id} not found.");
+            }
+
+            return Ok(updatedExpense);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred: {ex.Message}");
+        }
+    }
 }

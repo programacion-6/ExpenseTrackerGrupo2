@@ -7,17 +7,21 @@ public record ExpenseUpdateRequest
     decimal Amount,
     string Description,
     string Category,
-    DateTime Date
+    DateTime Date,
+    Guid expense_id,
+    Guid user_id
 )
 {
     public Expense ToModel()
     {
         return new Expense
         {
+            user_id = user_id, 
+            expense_id = expense_id,
             Amount = Amount,
             Description = Description,
             Category = Category,
-            expense_date = Date
+            expense_date = Date            
         };
     }
 }

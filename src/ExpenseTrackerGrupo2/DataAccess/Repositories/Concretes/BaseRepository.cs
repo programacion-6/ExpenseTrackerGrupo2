@@ -37,12 +37,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     }
 
     public async Task<int> Update(T entity)
-    {
-        var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
-        using var connection = await _dbConnectionFactory.CreateConnectionAsync();
-        var query = $"UPDATE {tableName} SET {StringUtils.GetSetClause<T>()} WHERE {StringUtils.ToSnakeCase(typeof(T).Name)}_id = @Id";
-        return await connection.ExecuteAsync(query, entity);
-    }
+{
+    var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
+    using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+    var query = $"UPDATE {tableName} SET {StringUtils.GetSetClause<T>()} WHERE {StringUtils.ToSnakeCase(typeof(T).Name)}_id = @Expense_Id";
+    return await connection.ExecuteAsync(query, entity);
+}
 
     public async Task<bool> Delete(Guid id)
     {
