@@ -15,7 +15,7 @@ public record IncomeUpdateRequest
         {
             Amount = Amount,
             Source = Source,
-            Date = Date
+            IncomeDate = Date
         };
     }
 }

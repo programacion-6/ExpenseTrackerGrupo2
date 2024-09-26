@@ -13,9 +13,11 @@ public record IncomeCreateRequest
     {
         return new Income
         {
+            IncomeId = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
             Amount = Amount,
             Source = Source,
-            Date = Date
+            IncomeDate = Date
         };
     }
 }

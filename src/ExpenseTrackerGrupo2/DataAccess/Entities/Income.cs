@@ -2,10 +2,10 @@ namespace ExpenseTrackerGrupo2.DataAccess.Entities;
 
 public class Income
 {
-    private Guid Id { get; init; } = Guid.NewGuid();
+    public Guid IncomeId { get; set; } = Guid.NewGuid();
     public required decimal Amount { get; set; }
     public required string Source { get; set; }
-    public required DateTime Date { get; set; }
-    private DateTime CreatedAt { get; set; }
-    private Guid UserId { get; set; }
+    public required DateTime IncomeDate { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public Guid UserId { get; set; }
 }

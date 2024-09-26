@@ -14,10 +14,12 @@ public record ExpenseCreateRequest
     {
         return new Expense
         {
+            expense_id = Guid.NewGuid(),
+            user_id = Guid.NewGuid(),
             Amount = Amount,
             Description = Description,
             Category = Category,
-            Date = Date
+            expense_date = DateTime.UtcNow
         };
     }
 }
