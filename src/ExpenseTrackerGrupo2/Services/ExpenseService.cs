@@ -5,9 +5,9 @@ using ExpenseTrackerGrupo2.DataAccess.Entities;
 
 public class ExpenseService : IExpenseService
 {
-    private readonly ExpenseRepository _expenseRepository;
+    private readonly IExpenseRepository _expenseRepository;
 
-    public ExpenseService(ExpenseRepository expenseRepository)
+    public ExpenseService(IExpenseRepository expenseRepository)
     {
         this._expenseRepository = expenseRepository;
     }
