@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS user (
     user_id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS expenses (
+CREATE TABLE IF NOT EXISTS expense (
     expense_id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS expenses (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS incomes (
+CREATE TABLE IF NOT EXISTS income (
     income_id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS incomes (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS budgets (
+CREATE TABLE IF NOT EXISTS budget (
     budget_id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
     month VARCHAR(7) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS budgets (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS goals (
+CREATE TABLE IF NOT EXISTS goal (
     goal_id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
     goal_amount DECIMAL(10, 2),
@@ -45,31 +45,31 @@ CREATE TABLE IF NOT EXISTS goals (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-INSERT INTO users (user_id, name, email, password_hash, created_at) 
+INSERT INTO user (user_id, name, email, password_hash, created_at) 
 VALUES 
 ('550e8400-e29b-41d4-a716-446655440000', 'Juan Pérez', 'juan.perez@gmail.com', 'hashed_password_juan', CURRENT_TIMESTAMP),
 ('550e8400-e29b-41d4-a716-446655440001', 'Ana Gómez', 'ana.gomez@gmail.com', 'hashed_password_ana', CURRENT_TIMESTAMP),
 ('550e8400-e29b-41d4-a716-446655440002', 'Luis Martínez', 'luis.martinez@gmail.com', 'hashed_password_luis', CURRENT_TIMESTAMP);
 
-INSERT INTO expenses (expense_id, user_id, amount, description, category, expense_date, created_at) 
+INSERT INTO expense (expense_id, user_id, amount, description, category, expense_date, created_at) 
 VALUES 
 ('650e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440000', 100.50, 'Compra de supermercado', 'Comida', '2024-09-15', CURRENT_TIMESTAMP),
 ('650e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440001', 50.00, 'Pago de servicios públicos', 'Servicios', '2024-09-14', CURRENT_TIMESTAMP),
 ('650e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440002', 200.00, 'Compra de ropa', 'Ropa', '2024-09-13', CURRENT_TIMESTAMP);
 
-INSERT INTO incomes (income_id, user_id, amount, source, income_date, created_at) 
+INSERT INTO income (income_id, user_id, amount, source, income_date, created_at) 
 VALUES 
 ('750e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440000', 1500.00, 'Salario', '2024-09-01', CURRENT_TIMESTAMP),
 ('750e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440001', 1800.00, 'Salario', '2024-09-05', CURRENT_TIMESTAMP),
 ('750e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440002', 1200.00, 'Salario', '2024-09-10', CURRENT_TIMESTAMP);
 
-INSERT INTO budgets (budget_id, user_id, month, budget_amount) 
+INSERT INTO budget (budget_id, user_id, month, budget_amount) 
 VALUES 
 ('850e8400-e29b-41d4-a716-446655440009', '550e8400-e29b-41d4-a716-446655440000', '2024-09', 1200.00),
 ('850e8400-e29b-41d4-a716-446655440010', '550e8400-e29b-41d4-a716-446655440001', '2024-09', 1500.00),
 ('850e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440002', '2024-09', 1000.00);
 
-INSERT INTO goals (goal_id, user_id, goal_amount, deadline, current_amount, created_at) 
+INSERT INTO goal (goal_id, user_id, goal_amount, deadline, current_amount, created_at) 
 VALUES 
 ('950e8400-e29b-41d4-a716-446655440012', '550e8400-e29b-41d4-a716-446655440000', 1000.00, '2024-12-31', 500.00, CURRENT_TIMESTAMP),
 ('950e8400-e29b-41d4-a716-446655440013', '550e8400-e29b-41d4-a716-446655440001', 2000.00, '2025-06-30', 300.00, CURRENT_TIMESTAMP),
