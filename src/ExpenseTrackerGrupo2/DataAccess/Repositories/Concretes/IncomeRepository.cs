@@ -1,5 +1,4 @@
 using Dapper;
-
 using ExpenseTrackerGrupo2.Persistence.Database;
 using ExpenseTrackerGrupo2.DataAccess.Entities;
 
@@ -11,7 +10,7 @@ public class IncomeRepository : BaseRepository<Income>, IIncomeRepository
 
     public async Task<IList<Income>> GetIncomeBySource(string source)
     {
-        using var connection = await _dbConnectionFactory.CreateConnection();
+        using var connection = await _dbConnectionFactory.CreateConnectionAsync();
         var query = "SELECT * FROM incomes WHERE source = @Source";
         var incomes = await connection.QueryAsync<Income>(query, new { Source = source });
         return incomes.ToList();
