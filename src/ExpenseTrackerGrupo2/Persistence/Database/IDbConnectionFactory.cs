@@ -4,5 +4,6 @@ namespace ExpenseTrackerGrupo2.Persistence.Database;
 
 public interface IDbConnectionFactory
 {
-     Task<IDbConnection> CreateConnection();
+    Task<IDbConnection> CreateConnectionAsync();
+    Task<IDbTransaction> MakeTransactionAsync();
 }

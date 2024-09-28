@@ -1,3 +1,5 @@
+using System.Dynamic;
+
 using ExpenseTrackerGrupo2.DataAccess.Entities;
 
 namespace ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Incomes;
@@ -6,7 +8,8 @@ public record IncomeCreateRequest
 (
     decimal Amount,
     string Source, 
-    DateTime Date
+    DateTime Date,
+    Guid User
 )
 { 
     public Income ToModel()
@@ -15,7 +18,8 @@ public record IncomeCreateRequest
         {
             Amount = Amount,
             Source = Source,
-            Date = Date
+            income_date = Date,
+            user_id = User
         };
     }
 }
