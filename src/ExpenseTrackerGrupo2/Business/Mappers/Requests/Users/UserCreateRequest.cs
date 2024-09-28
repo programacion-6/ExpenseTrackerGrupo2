@@ -13,9 +13,9 @@ public record UserCreateRequest
     {
         return new User
         {
-            AccountName = AccountName,
+            Name = AccountName,
             Email = Email,
-            Password = Password
+            password_hash = Password
         };
     }
 }

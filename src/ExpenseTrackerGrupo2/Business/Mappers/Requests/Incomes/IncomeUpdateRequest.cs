@@ -6,7 +6,8 @@ public record IncomeUpdateRequest
 (
     decimal Amount,
     string Source, 
-    DateTime Date
+    DateTime Date,
+    Guid UserId
 )
 { 
     public Income ToModel()
@@ -15,7 +16,8 @@ public record IncomeUpdateRequest
         {
             Amount = Amount,
             Source = Source,
-            Date = Date
+            income_date = Date,
+            user_id = UserId
         };
     }
 }

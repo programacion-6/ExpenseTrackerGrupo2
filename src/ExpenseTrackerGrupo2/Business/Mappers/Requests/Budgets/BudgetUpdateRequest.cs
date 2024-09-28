@@ -12,7 +12,7 @@ public record BudgetUpdateRequest
     {
         return new Budget
         {
-            BudgetAmount = BudgetAmount,
+            budget_amount = BudgetAmount,
             Month = Month
         };
     }
