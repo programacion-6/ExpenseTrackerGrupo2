@@ -17,7 +17,7 @@ public record ExpenseUpdateRequest
             Amount = Amount,
             Description = Description,
             Category = Category,
-            Date = Date
+            expense_date = Date
         };
     }
 }

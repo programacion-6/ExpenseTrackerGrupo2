@@ -13,9 +13,9 @@ public record GoalUpdateRequest
     {
         return new Goal
         {
-            GoalAmount = GoalAmount,
+            goal_amount = GoalAmount,
             Deadline = Deadline,
-            CurrentAmount = CurrentAmount
+            current_amount = CurrentAmount
         };
     }
 }

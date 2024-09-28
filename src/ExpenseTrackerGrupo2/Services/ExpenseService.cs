@@ -5,9 +5,9 @@ using ExpenseTrackerGrupo2.DataAccess.Entities;
 
 public class ExpenseService : IExpenseService
 {
-    private readonly ExpenseRepository _expenseRepository;
+    private readonly IExpenseRepository _expenseRepository;
 
-    public ExpenseService(ExpenseRepository expenseRepository)
+    public ExpenseService(IExpenseRepository expenseRepository)
     {
         this._expenseRepository = expenseRepository;
     }
@@ -79,12 +79,12 @@ public class ExpenseService : IExpenseService
 
         if (startDate.HasValue)
         {
-            expenses = expenses.Where(e => e.Date >= startDate.Value).ToList();
+            expenses = expenses.Where(e => e.expense_date >= startDate.Value).ToList();
         }
 
         if (endDate.HasValue)
         {
-            expenses = expenses.Where(e => e.Date <= endDate.Value).ToList();
+            expenses = expenses.Where(e => e.expense_date <= endDate.Value).ToList();
         }
 
         if (!string.IsNullOrEmpty(category))

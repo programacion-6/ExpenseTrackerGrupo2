@@ -1,32 +1,26 @@
-using ExpenseTrackerGrupo2.Business.Services.Interfaces;
-using ExpenseTrackerGrupo2.DataAccess.Concretes;
-using ExpenseTrackerGrupo2.Persistence.Database;
+using ExpenseTrackerGrupo2.DependencyInjection;
+using ExpenseTrackerGrupo2.RequestPipeline;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddControllers();
-
-builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
-builder.Services.AddScoped<IExpenseService, ExpenseService>();
-// builder.Services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
-
+builder.Services
+    .AddServices()
+    .AddPersistence(builder.Configuration)
+    .AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseGlobalErrorHandling();
+app.UseSwagger();
+app.UseSwaggerUI(c => 
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Expense Tracker API V1");
+    c.RoutePrefix = string.Empty;
+});
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

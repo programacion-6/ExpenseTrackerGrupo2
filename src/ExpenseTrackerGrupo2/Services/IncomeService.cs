@@ -5,9 +5,9 @@ using ExpenseTrackerGrupo2.DataAccess.Entities;
 
 public class IncomeService : IIncomeServices
 {
-    private readonly IncomeRepository _incomeRepository;
+    private readonly IIncomeRepository _incomeRepository;
 
-    public IncomeService(IncomeRepository incomeRepository)
+    public IncomeService(IIncomeRepository incomeRepository)
     {
         this._incomeRepository = incomeRepository;
     }
