@@ -76,7 +76,6 @@ namespace ExpenseTrackerGrupo2.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateIncome(Guid id, [FromBody] IncomeUpdateRequest request)
         {
-            // Validations
             if (id == Guid.Empty)
             {
                 return BadRequest("Invalid ID format.");
