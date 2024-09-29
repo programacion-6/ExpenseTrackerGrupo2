@@ -36,7 +36,7 @@ namespace ExpenseTrackerGrupo2.API.Controllers
         public async Task<IActionResult> GetAllIncomes()
         {
             var incomes = await _incomeService.GetAllIncomes();
-            if (incomes == null || incomes.Count == 0)
+            if (incomes == null || !incomes.Any())
             {
                 return Ok(new { Message = "No incomes found." });
             }
@@ -93,7 +93,7 @@ namespace ExpenseTrackerGrupo2.API.Controllers
 
             try
             {
-                var updatedIncome = await _incomeService.UpdateIncome(request);
+                int? updatedIncome = await _incomeService.UpdateIncome(request);
                 if (updatedIncome == null)
                 {
                     return NotFound($"Income with ID {id} not found.");
