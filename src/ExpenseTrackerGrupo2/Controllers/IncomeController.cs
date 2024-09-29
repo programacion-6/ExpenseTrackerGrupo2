@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
 using ExpenseTrackerGrupo2.Business.Services.Interfaces;
 using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Incomes;
 
 namespace ExpenseTrackerGrupo2.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/income/[controller]")]
     public class IncomeController : ControllerBase
     {
         private readonly IIncomeServices _incomeService;
@@ -17,7 +15,6 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             _incomeService = incomeService;
         }
 
-        // GET: /api/income/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetIncomeById(Guid id)
         {
@@ -35,7 +32,6 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             return Ok(income);
         }
 
-        // GET: /api/income
         [HttpGet]
         public async Task<IActionResult> GetAllIncomes()
         {
@@ -48,11 +44,9 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             return Ok(incomes);
         }
 
-        // POST: /api/income
         [HttpPost]
         public async Task<IActionResult> CreateIncome([FromBody] IncomeCreateRequest request)
         {
-            // Validations
             if (request == null)
             {
                 return BadRequest("Request body cannot be null.");
@@ -79,7 +73,6 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             }
         }
 
-        // PUT: /api/income/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateIncome(Guid id, [FromBody] IncomeUpdateRequest request)
         {
@@ -115,7 +108,6 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             }
         }
 
-        // DELETE: /api/income/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteIncome(Guid id)
         {
