@@ -23,9 +23,8 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     public async Task<T> GetById(Guid id)
     {
         var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
-        var primaryKeyName = $"{tableName}_id";
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
-        var result = await connection.QuerySingleOrDefaultAsync<T>($"SELECT * FROM {tableName} WHERE {primaryKeyName} = @{primaryKeyName}", new { Id = id });
+        var result = await connection.QuerySingleOrDefaultAsync<T>($"SELECT * FROM {tableName} WHERE {StringUtils.ToSnakeCase(typeof(T).Name)}_id = @Id", new { Id = id });
         return result;
     }
 
@@ -40,18 +39,18 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     public async Task<int> Update(T entity)
     {
         var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
-        var primaryKeyName = $"{StringUtils.ToSnakeCase(typeof(T).Name)}_id"; 
+        var tableNameUpper = char.ToUpper(tableName[0]) + tableName.Substring(1);
+        var idColumn = $"{tableName}_id";
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
-        var query = $"UPDATE {tableName} SET {StringUtils.GetSetClause<T>()} WHERE {primaryKeyName} = @{primaryKeyName}";
+        var query = $"UPDATE {tableName} SET {StringUtils.GetSetClause<T>()} WHERE {idColumn} = @{tableNameUpper}_Id";
         return await connection.ExecuteAsync(query, entity);
     }
 
     public async Task<bool> Delete(Guid id)
     {
         var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
-        var primaryKeyName = $"{tableName}_id";
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
-        var result = await connection.ExecuteAsync($"DELETE FROM {tableName} WHERE {primaryKeyName} = @{primaryKeyName}", new { Id = id });
+        var result = await connection.ExecuteAsync($"DELETE FROM {tableName} WHERE {StringUtils.ToSnakeCase(typeof(T).Name)}_id = @Id", new { Id = id });
         return result > 0;
     }
 }
