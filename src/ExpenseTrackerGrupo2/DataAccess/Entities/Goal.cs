@@ -7,5 +7,5 @@ public class Goal
     public required DateTime Deadline { get; set; }
     public required decimal current_amount { get; set; }
     public DateTime CreatedAt;
-    public Guid user_id;
+    public Guid user_id {get; set;}
 }
