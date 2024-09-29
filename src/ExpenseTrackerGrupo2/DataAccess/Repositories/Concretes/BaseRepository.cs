@@ -23,8 +23,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     public async Task<T> GetById(Guid id)
     {
         var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
+        var primaryKeyName = $"{tableName}_id";
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
-        var result = await connection.QuerySingleOrDefaultAsync<T>($"SELECT * FROM {tableName} WHERE {StringUtils.ToSnakeCase(typeof(T).Name)}_id = @Id", new { Id = id });
+        var result = await connection.QuerySingleOrDefaultAsync<T>($"SELECT * FROM {tableName} WHERE {primaryKeyName} = @{primaryKeyName}", new { Id = id });
         return result;
     }
 
@@ -48,8 +49,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     public async Task<bool> Delete(Guid id)
     {
         var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
+        var primaryKeyName = $"{tableName}_id";
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
-        var result = await connection.ExecuteAsync($"DELETE FROM {tableName} WHERE {StringUtils.ToSnakeCase(typeof(T).Name)}_id = @Id", new { Id = id });
+        var result = await connection.ExecuteAsync($"DELETE FROM {tableName} WHERE {primaryKeyName} = @{primaryKeyName}", new { Id = id });
         return result > 0;
     }
 }
