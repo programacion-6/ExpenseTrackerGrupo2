@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExpenseTrackerGrupo2.Controllers;
 
 [ApiController]
-[Route("api/expenses")]
+[Route("api/v1/expenses")]
 public class ExpenseController : ControllerBase
 {
     private readonly IExpenseService _expenseService;
@@ -19,6 +19,11 @@ public class ExpenseController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateExpense([FromBody] ExpenseCreateRequest request)
     {
+        if (request == null)
+        {
+            return BadRequest("Request body cannot be null.");
+        }
+
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
@@ -26,11 +31,11 @@ public class ExpenseController : ControllerBase
 
         try
         {
-            var result = await _expenseService.CreateExpense(request);
+            var createdExpense = await _expenseService.CreateExpense(request);
 
-            if (result > 0)
+            if (createdExpense > 0)
             {
-                return CreatedAtAction(nameof(GetExpenseById), request);
+                return CreatedAtAction(nameof(GetExpenseById), new { id = createdExpense }, createdExpense);
             }
 
             return StatusCode(500, "An error occurred while creating the expense.");
@@ -66,8 +71,8 @@ public class ExpenseController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetExpenses(
-                                                 [FromQuery] DateTime? startDate, 
-                                                 [FromQuery] DateTime? endDate, 
+                                                 [FromQuery] DateTime? startDate,
+                                                 [FromQuery] DateTime? endDate,
                                                  [FromQuery] string? category
                                                  )
     {
@@ -91,6 +96,16 @@ public class ExpenseController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateExpense(Guid id, [FromBody] ExpenseUpdateRequest request)
     {
+        if (id == Guid.Empty)
+        {
+            return BadRequest("Invalid ID format.");
+        }
+
+        if (request == null)
+        {
+            return BadRequest("Request body cannot be null.");
+        }
+
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
