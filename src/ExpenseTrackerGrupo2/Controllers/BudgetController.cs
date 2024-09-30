@@ -18,18 +18,25 @@ namespace ExpenseTrackerGrupo2.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBudgetById(Guid id)
         {
-            if (id == Guid.Empty)
+            try
             {
-                return BadRequest("Invalid ID format.");
-            }
+                if (id == Guid.Empty)
+                {
+                    return BadRequest("Invalid ID format.");
+                }
 
-            var budget = await _budgetService.GetBudgetById(id);
-            if (budget == null)
+                var budget = await _budgetService.GetBudgetById(id);
+                if (budget == null)
+                {
+                    return NotFound($"Budget with ID {id} not found.");
+                }
+
+                return Ok(budget);
+            }
+            catch (Exception ex)
             {
-                return NotFound($"Budget with ID {id} not found.");
+                return StatusCode(500, $"An error occurred while retrieving the budget: {ex.Message}");
             }
-
-            return Ok(budget);
         }
 
         [HttpGet]
@@ -60,7 +67,7 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             try
             {
                 var createdBudget = await _budgetService.CreateBudget(request);
-                return CreatedAtAction(nameof(GetBudgetById), new { id = createdBudget.budget_id }, createdBudget);
+                return CreatedAtAction(nameof(GetBudgetById), new { id = createdBudget }, createdBudget);
             }
             catch (Exception ex)
             {
@@ -88,7 +95,7 @@ namespace ExpenseTrackerGrupo2.API.Controllers
 
             try
             {
-                var updatedBudget = await _budgetService.UpdateBudget(request, id);
+                int? updatedBudget = await _budgetService.UpdateBudget(request, id);
                 if (updatedBudget == null)
                 {
                     return NotFound($"Budget with ID {id} not found.");
