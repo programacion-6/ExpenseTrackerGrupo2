@@ -1,18 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
 using ExpenseTrackerGrupo2.Business.Services.Interfaces;
 using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Incomes;
+using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Goals;
 
 namespace ExpenseTrackerGrupo2.API.Controllers
 {
     [ApiController]
-    [Route("api/v1/income/[controller]")]
+    [Route("api/v1/[controller]")]
     public class IncomeController : ControllerBase
     {
         private readonly IIncomeServices _incomeService;
+        private readonly IGoalService _goalService; 
 
-        public IncomeController(IIncomeServices incomeService)
+        public IncomeController(IIncomeServices incomeService, IGoalService goalService)
         {
             _incomeService = incomeService;
+            _goalService = goalService;
         }
 
         [HttpGet("{id}")]
@@ -64,14 +67,52 @@ namespace ExpenseTrackerGrupo2.API.Controllers
 
             try
             {
+
+                string notificationMessage = string.Empty;
+
+                var goal = await _goalService.GetGoalByUserId(request.User);
+                if (goal != null)
+                {
+                    goal.current_amount += request.Amount;
+                    var goalUpdateRequest = new GoalUpdateRequest
+                    (
+
+                        goal.goal_amount,
+                        goal.Deadline,
+                        goal.current_amount,
+                        goal.user_id
+                    );
+
+                    await _goalService.UpdateGoal(goalUpdateRequest, goal.goal_id);
+
+                    var progress = (goal.current_amount/ goal.goal_amount) * 100;
+                    if (progress >= 50 && progress < 75)
+                    {
+                        notificationMessage = "You've reached 50% of your savings goal!";
+                    }
+                    else if (progress >= 75 && progress < 100)
+                    {
+                        notificationMessage = "You've reached 75% of your savings goal!";
+                    }
+                    else if (progress >= 100)
+                    {
+                        notificationMessage = "You've reached 100% of your savings goal!";
+                    }
+                }
                 var createdIncome = await _incomeService.CreateIncome(request);
-                return CreatedAtAction(nameof(GetIncomeById), new { id = createdIncome }, createdIncome);
+                return CreatedAtAction(nameof(GetIncomeById), new { id = createdIncome}, new 
+                {
+                    Income = createdIncome,
+                    Notification = notificationMessage
+                });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"An error occurred while creating the income: {ex.Message}");
             }
         }
+
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateIncome(Guid id, [FromBody] IncomeUpdateRequest request)

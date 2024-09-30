@@ -6,7 +6,8 @@ public record GoalUpdateRequest
 (
     decimal GoalAmount,
     DateTime Deadline,
-    decimal CurrentAmount
+    decimal CurrentAmount,
+    Guid UserId
 )
 { 
     public Goal ToModel()
@@ -15,7 +16,8 @@ public record GoalUpdateRequest
         {
             goal_amount = GoalAmount,
             Deadline = Deadline,
-            current_amount = CurrentAmount
+            current_amount = CurrentAmount,
+            user_id = UserId
         };
     }
 }
