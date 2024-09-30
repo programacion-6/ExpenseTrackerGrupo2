@@ -18,6 +18,9 @@ public class GoalRepository : BaseRepository<Goal>, IGoalRepository
             $"SELECT * FROM {tableName} WHERE user_id = @UserId", 
             new { UserId = userId }
         );
+
+        if (result == null)
+            throw new KeyNotFoundException($"{typeof(Goal).Name} not found.");
         
         return result;
     }
