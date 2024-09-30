@@ -1,6 +1,7 @@
 using Dapper;
 using ExpenseTrackerGrupo2.Persistence.Database;
 using ExpenseTrackerGrupo2.DataAccess.Entities;
+using ExpenseTrackerGrupo2.Business.Services.Mappers.Responses;
 
 namespace ExpenseTrackerGrupo2.DataAccess.Concretes;
 
@@ -16,7 +17,7 @@ public class BudgetRepository : BaseRepository<Budget>, IBudgetRepository
         return rowsAffected > 0;
     }
 
-    public async Task<Budget> GetBudgetByUserIdAndMonth(Guid userId, string month, int year)
+    public async Task<BudgetResponse> GetBudgetByUserIdAndMonth(Guid userId, string month, int year)
     {
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
         var query = "SELECT * FROM budget WHERE user_id = @UserId AND month = @Month AND year = @Year";
@@ -25,6 +26,6 @@ public class BudgetRepository : BaseRepository<Budget>, IBudgetRepository
         if (budget == null)
             throw new InvalidOperationException("Budget not found for the specified user, month, and year.");
 
-        return budget;
+        return BudgetResponse.FromDomain(budget);
     }
 }
