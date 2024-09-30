@@ -13,7 +13,7 @@ public class BudgetRepository : BaseRepository<Budget>, IBudgetRepository
             using var connection = await _dbConnectionFactory.CreateConnectionAsync();
             var query = "INSERT INTO budget (budget_id, user_id, month, year, amount) VALUES (@BudgetId, @UserId, @Month, @Year, @Amount)";
             var rowsAffected = await connection.ExecuteAsync(query, budget);
-            return rowsAffected > 0; // Return true if the insert was successful
+            return rowsAffected > 0;
         }
 
         public async Task<Budget> GetBudgetByUserIdAndMonth(Guid userId, int month, int year)
