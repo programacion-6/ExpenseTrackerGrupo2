@@ -95,7 +95,7 @@ public class ExpenseService : IExpenseService
         return expenses;
     }
 
-    public async Task<int> UpdateExpense(Guid id, ExpenseUpdateRequest expense)
+    public async Task<int> UpdateExpense(ExpenseUpdateRequest expense, Guid id)
     {
         try
         {
@@ -108,10 +108,10 @@ public class ExpenseService : IExpenseService
             else
             {
                 var expenseModel = expense.ToModel();
-                var response = await _expenseRepository.Update(expenseModel);
+                var response = await _expenseRepository.Update(expenseModel, id);
                 return response;
             }
-        }
+         }
         catch (Exception ex)
         {
             throw new Exception($"An error occurred while updating the expense: {ex.Message}");

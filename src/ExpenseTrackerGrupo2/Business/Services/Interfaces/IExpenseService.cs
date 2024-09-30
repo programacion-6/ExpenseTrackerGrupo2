@@ -9,7 +9,7 @@ public interface IExpenseService
     Task<IList<Expense>> GetAllExpenses();
     Task<Expense> GetExpenseById(Guid expenseId);
     Task<int> CreateExpense(ExpenseCreateRequest expense);
-    Task<int> UpdateExpense(Guid id, ExpenseUpdateRequest expense);
+    Task<int> UpdateExpense(ExpenseUpdateRequest expense, Guid id);
     Task<bool> DeleteExpense(Guid expenseId);
     Task<IList<Expense>> GetExpenses(DateTime? startDate, DateTime? endDate, string? category);
 }

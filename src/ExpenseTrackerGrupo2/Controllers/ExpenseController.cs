@@ -113,7 +113,7 @@ public class ExpenseController : ControllerBase
 
         try
         {
-            var updatedExpense = await _expenseService.UpdateExpense(id, request);
+            var updatedExpense = await _expenseService.UpdateExpense(request, id);
             return Ok(updatedExpense);
         }
         catch (KeyNotFoundException ex)

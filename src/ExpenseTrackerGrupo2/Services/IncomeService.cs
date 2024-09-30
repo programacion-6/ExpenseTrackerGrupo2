@@ -75,12 +75,12 @@ public class IncomeService : IIncomeServices
         }
     }
 
-    public async Task<int> UpdateIncome(IncomeUpdateRequest income)
+    public async Task<int> UpdateIncome(IncomeUpdateRequest income, Guid id)
     {
         try
         {
             var incomeModel = income.ToModel();
-            var result = await _incomeRepository.Update(incomeModel);
+            var result = await _incomeRepository.Update(incomeModel, id);
             return result;
         }
         catch (Exception ex)
