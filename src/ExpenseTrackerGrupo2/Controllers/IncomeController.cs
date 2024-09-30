@@ -88,15 +88,15 @@ namespace ExpenseTrackerGrupo2.API.Controllers
                     var progress = (goal.current_amount/ goal.goal_amount) * 100;
                     if (progress >= 50 && progress < 75)
                     {
-                        notificationMessage = "¡Has alcanzado el 50% de tu meta de ahorro!";
+                        notificationMessage = "You've reached 50% of your savings goal!";
                     }
                     else if (progress >= 75 && progress < 100)
                     {
-                        notificationMessage = "¡Has alcanzado el 75% de tu meta de ahorro!";
+                        notificationMessage = "You've reached 75% of your savings goal!";
                     }
                     else if (progress >= 100)
                     {
-                        notificationMessage = "¡Has alcanzado tu meta de ahorro!";
+                        notificationMessage = "You've reached 100% of your savings goal!";
                     }
                 }
                 var createdIncome = await _incomeService.CreateIncome(request);
