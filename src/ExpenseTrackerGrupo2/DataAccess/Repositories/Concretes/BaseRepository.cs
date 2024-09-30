@@ -26,6 +26,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
         var result = await connection.QuerySingleOrDefaultAsync<T>($"SELECT * FROM {tableName} WHERE {StringUtils.ToSnakeCase(typeof(T).Name)}_id = @Id", new { Id = id });
+        
+        if (result == null)
+            throw new KeyNotFoundException($"{typeof(T).Name} not found.");
+
         return result;
     }
 
@@ -44,7 +48,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
         var query = $"UPDATE {tableName} SET {StringUtils.GetSetClause<T>()} WHERE {idColumn} = @Id";
         var parameters = new DynamicParameters(entity);
-        parameters.Add("Id", id); 
+        parameters.Add("Id", id);
         return await connection.ExecuteAsync(query, parameters);
     }
 
