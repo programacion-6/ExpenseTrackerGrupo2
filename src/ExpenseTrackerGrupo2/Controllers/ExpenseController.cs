@@ -150,4 +150,17 @@ public class ExpenseController : ControllerBase
             return StatusCode(500, $"An error occurred: {ex.Message}");
         }
     }
+     [HttpGet("highestspendingcategory")]
+    public async Task<IActionResult> GetHighestSpendingCategory()
+    {
+        try
+        {
+            var highestSpendingCategory = await _expenseService.GetHighestSpendingCategory();
+            return Ok(highestSpendingCategory);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
 }
