@@ -1,4 +1,5 @@
 using Dapper;
+
 using ExpenseTrackerGrupo2.Persistence.Database;
 using ExpenseTrackerGrupo2.Utils;
 
@@ -36,15 +37,20 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return await connection.ExecuteAsync(query, entity);
     }
 
-    public async Task<int> Update(T entity)
+    public async Task<int> Update(T entity, Guid id)
     {
         var tableName = StringUtils.ToSnakeCase(typeof(T).Name);
-        var tableNameUpper = char.ToUpper(tableName[0]) + tableName.Substring(1);
         var idColumn = $"{tableName}_id";
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
-        var query = $"UPDATE {tableName} SET {StringUtils.GetSetClause<T>()} WHERE {idColumn} = @{tableNameUpper}_Id";
-        return await connection.ExecuteAsync(query, entity);
+        var query = $"UPDATE {tableName} SET {StringUtils.GetSetClause<T>()} WHERE {idColumn} = @Id";
+
+        // Here we create a new anonymous object for the parameters
+        var parameters = new DynamicParameters(entity);
+        parameters.Add("Id", id);  // Ensure id is added correctly
+
+        return await connection.ExecuteAsync(query, parameters);
     }
+
 
     public async Task<bool> Delete(Guid id)
     {
