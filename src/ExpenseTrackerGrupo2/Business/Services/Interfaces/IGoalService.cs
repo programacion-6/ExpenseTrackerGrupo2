@@ -8,7 +8,7 @@ public interface IGoalService
     Task<IList<Goal>> GetAllGoals();
     Task<Goal> GetGoalById(Guid goalId);
     Task<int> CreateGoal(GoalCreateRequest goal);
-    Task<int> UpdateGoal(GoalUpdateRequest goal);
+    Task<int> UpdateGoal(GoalUpdateRequest goal, Guid id);
     Task<bool> DeleteGoal(Guid goalId);
     Task<Goal> GetGoalByUserId (Guid userId);
 }

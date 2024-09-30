@@ -79,10 +79,11 @@ namespace ExpenseTrackerGrupo2.API.Controllers
 
                         goal.goal_amount,
                         goal.Deadline,
-                        goal.current_amount
+                        goal.current_amount,
+                        goal.user_id
                     );
 
-                    await _goalService.UpdateGoal(goalUpdateRequest);
+                    await _goalService.UpdateGoal(goalUpdateRequest, goal.goal_id);
 
                     var progress = (goal.current_amount/ goal.goal_amount) * 100;
                     if (progress >= 50 && progress < 75)

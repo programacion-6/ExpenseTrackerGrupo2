@@ -7,7 +7,8 @@ public record ExpenseUpdateRequest
     decimal Amount,
     string Description,
     string Category,
-    DateTime Date
+    DateTime Date,
+    Guid UserId
 )
 {
     public Expense ToModel()
@@ -17,7 +18,8 @@ public record ExpenseUpdateRequest
             Amount = Amount,
             Description = Description,
             Category = Category,
-            expense_date = Date
+            expense_date = Date,
+            user_id = UserId
         };
     }
 }

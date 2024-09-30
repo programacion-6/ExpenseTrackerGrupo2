@@ -83,7 +83,7 @@ namespace ExpenseTrackerGrupo2.API.Controllers
 
             try
             {
-                var updatedGoal = await _goalService.UpdateGoal(request);
+                var updatedGoal = await _goalService.UpdateGoal(request, id);
                 if (updatedGoal == 0)
                 {
                     return NotFound($"Goal with ID {id} not found.");

@@ -73,12 +73,12 @@ public class GoalService : IGoalService
         }
     }
 
-    public async Task<int> UpdateGoal(GoalUpdateRequest goal)
+    public async Task<int> UpdateGoal(GoalUpdateRequest goal, Guid id)
     {
         try
         {
             var goalModel = goal.ToModel();
-            var response = await _goalRepository.Update(goalModel);
+            var response = await _goalRepository.Update(goalModel, id);
             return response;
         }
         catch (Exception ex)
