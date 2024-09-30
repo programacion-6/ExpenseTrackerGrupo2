@@ -3,7 +3,9 @@ using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Incomes;
 using ExpenseTrackerGrupo2.Business.Services.Mappers.Responses;
 using ExpenseTrackerGrupo2.DataAccess.Concretes;
 
-public class IncomeService : IIncomeServices
+namespace ExpenseTrackerGrupo2.Business.Services.Concretes;
+
+public class IncomeService : IIncomeService
 {
     private readonly IIncomeRepository _incomeRepository;
 

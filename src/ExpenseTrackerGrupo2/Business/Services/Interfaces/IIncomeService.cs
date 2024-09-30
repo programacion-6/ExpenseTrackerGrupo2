@@ -3,7 +3,7 @@ using ExpenseTrackerGrupo2.Business.Services.Mappers.Responses;
 
 namespace ExpenseTrackerGrupo2.Business.Services.Interfaces;
 
-public interface IIncomeServices
+public interface IIncomeService
 {
     Task<IList<IncomeResponse>> GetAllIncomes();
     Task<IncomeResponse> GetIncomeById(Guid incomeId);

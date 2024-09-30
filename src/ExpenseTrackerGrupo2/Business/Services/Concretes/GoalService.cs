@@ -3,6 +3,8 @@ using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Goals;
 using ExpenseTrackerGrupo2.DataAccess.Concretes;
 using ExpenseTrackerGrupo2.DataAccess.Entities;
 
+namespace ExpenseTrackerGrupo2.Business.Services.Concretes;
+
 public class GoalService : IGoalService
 {
     private readonly IGoalRepository _goalRepository;

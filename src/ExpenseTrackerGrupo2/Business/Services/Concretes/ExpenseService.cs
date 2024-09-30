@@ -3,6 +3,8 @@ using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Expenses;
 using ExpenseTrackerGrupo2.Business.Services.Mappers.Responses;
 using ExpenseTrackerGrupo2.DataAccess.Concretes;
 
+namespace ExpenseTrackerGrupo2.Business.Services.Concretes;
+
 public class ExpenseService : IExpenseService
 {
     private readonly IExpenseRepository _expenseRepository;
