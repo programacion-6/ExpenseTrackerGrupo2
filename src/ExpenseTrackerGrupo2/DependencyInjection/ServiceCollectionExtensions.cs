@@ -1,14 +1,15 @@
-namespace ExpenseTrackerGrupo2.DependencyInjection;
-
 using ExpenseTrackerGrupo2.Persistence.Database;
 using ExpenseTrackerGrupo2.DataAccess.Concretes;
 using ExpenseTrackerGrupo2.Business.Services.Interfaces;
+using ExpenseTrackerGrupo2.Business.Services.Concretes;
+
+namespace ExpenseTrackerGrupo2.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IIncomeServices, IncomeService>();
+        services.AddScoped<IIncomeService, IncomeService>();
         services.AddScoped<IExpenseService, ExpenseService>();
         services.AddScoped<IBudgetService, BudgetService>();
         services.AddScoped<IGoalService, GoalService>();

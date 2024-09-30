@@ -1,7 +1,9 @@
 using ExpenseTrackerGrupo2.Business.Services.Interfaces;
 using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Expenses;
+using ExpenseTrackerGrupo2.Business.Services.Mappers.Responses;
 using ExpenseTrackerGrupo2.DataAccess.Concretes;
-using ExpenseTrackerGrupo2.DataAccess.Entities;
+
+namespace ExpenseTrackerGrupo2.Business.Services.Concretes;
 
 public class ExpenseService : IExpenseService
 {
@@ -43,12 +45,14 @@ public class ExpenseService : IExpenseService
         }
     }
 
-    public async Task<IList<Expense>> GetAllExpenses()
+    public async Task<IList<ExpenseResponse>> GetAllExpenses()
     {
         try
         {
             var expenses = await _expenseRepository.GetAll();
-            return expenses;
+            var expenseResponses = expenses.Select(ExpenseResponse.FromDomain).ToList();
+            
+            return expenseResponses;
         }
         catch (Exception ex)
         {
@@ -56,16 +60,18 @@ public class ExpenseService : IExpenseService
         }
     }
 
-    public async Task<Expense> GetExpenseById(Guid expenseId)
+    public async Task<ExpenseResponse> GetExpenseById(Guid expenseId)
     {
         try
         {
             var expense = await _expenseRepository.GetById(expenseId);
+
             if (expense == null)
             {
                 throw new KeyNotFoundException($"Expense with ID {expenseId} not found.");
             }
-            return expense;
+
+            return ExpenseResponse.FromDomain(expense);
         }
         catch (Exception ex)
         {
@@ -73,7 +79,7 @@ public class ExpenseService : IExpenseService
         }
     }
 
-    public async Task<IList<Expense>> GetExpenses(DateTime? startDate, DateTime? endDate, string? category)
+    public async Task<IList<ExpenseResponse>> GetExpenses(DateTime? startDate, DateTime? endDate, string? category)
     {
         var expenses = await _expenseRepository.GetAll();
 
@@ -92,7 +98,9 @@ public class ExpenseService : IExpenseService
             expenses = expenses.Where(e => e.Category == category).ToList();
         }
 
-        return expenses;
+        var expenseResponses = expenses.Select(ExpenseResponse.FromDomain).ToList();
+
+        return expenseResponses;
     }
 
     public async Task<int> UpdateExpense(ExpenseUpdateRequest expense, Guid id)

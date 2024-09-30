@@ -9,10 +9,10 @@ namespace ExpenseTrackerGrupo2.API.Controllers
     [Route("api/v1/[controller]")]
     public class IncomeController : ControllerBase
     {
-        private readonly IIncomeServices _incomeService;
+        private readonly IIncomeService _incomeService;
         private readonly IGoalService _goalService; 
 
-        public IncomeController(IIncomeServices incomeService, IGoalService goalService)
+        public IncomeController(IIncomeService incomeService, IGoalService goalService)
         {
             _incomeService = incomeService;
             _goalService = goalService;

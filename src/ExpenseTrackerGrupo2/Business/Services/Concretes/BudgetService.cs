@@ -1,5 +1,6 @@
 using ExpenseTrackerGrupo2.Business.Services.Interfaces;
 using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Budgets;
+using ExpenseTrackerGrupo2.Business.Services.Mappers.Responses;
 using ExpenseTrackerGrupo2.DataAccess.Concretes;
 using ExpenseTrackerGrupo2.DataAccess.Entities;
 
@@ -12,16 +13,18 @@ public class BudgetService : IBudgetService
         _budgetRepository = budgetRepository;
     }
 
-    public async Task<Budget> GetBudgetById(Guid id)
+    public async Task<BudgetResponse> GetBudgetById(Guid id)
     {
         try
         {
             var budget = await _budgetRepository.GetById(id);
+            
             if (budget == null)
             {
                 throw new KeyNotFoundException("Budget not found.");
             }
-            return budget;
+
+            return BudgetResponse.FromDomain(budget);
         }
         catch (Exception ex)
         {
@@ -29,11 +32,14 @@ public class BudgetService : IBudgetService
         }
     }
 
-    public async Task<IList<Budget>> GetAllBudgets()
+    public async Task<IList<BudgetResponse>> GetAllBudgets()
     {
         try
         {
-            return await _budgetRepository.GetAll();
+            var budgets = await _budgetRepository.GetAll();
+            var budgetResponses = budgets.Select(BudgetResponse.FromDomain).ToList();
+            
+            return budgetResponses;
         }
         catch (Exception ex)
         {
