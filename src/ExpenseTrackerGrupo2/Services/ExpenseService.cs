@@ -3,22 +3,37 @@ using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Expenses;
 using ExpenseTrackerGrupo2.DataAccess.Concretes;
 using ExpenseTrackerGrupo2.DataAccess.Entities;
 
+using FluentValidation;
+
 public class ExpenseService : IExpenseService
 {
     private readonly IExpenseRepository _expenseRepository;
+    private readonly IValidator<Expense> _expenseValidator;
 
-    public ExpenseService(IExpenseRepository expenseRepository)
+    public ExpenseService(IExpenseRepository expenseRepository, IValidator<Expense> expenseValidator)
     {
         this._expenseRepository = expenseRepository;
+        this._expenseValidator = expenseValidator;
     }
 
     public async Task<int> CreateExpense(ExpenseCreateRequest expense)
     {
+        var expenseModel = expense.ToModel();
+        var validationResult = _expenseValidator.Validate(expenseModel);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
         try
         {
-            var expenseModel = expense.ToModel();
             var response = await _expenseRepository.Create(expenseModel);
             return response;
+        }
+        catch (ValidationException ex)
+        {
+            throw new Exception($"Validation failed: {ex.Message}");
         }
         catch (Exception ex)
         {
@@ -95,23 +110,31 @@ public class ExpenseService : IExpenseService
         return expenses;
     }
 
-    public async Task<int> UpdateExpense(ExpenseUpdateRequest expense, Guid id)
+   public async Task<int> UpdateExpense(ExpenseUpdateRequest expense, Guid id)
     {
         try
         {
             var existingExpense = await _expenseRepository.GetById(id);
-
             if (existingExpense == null)
             {
                 throw new KeyNotFoundException($"Expense with ID {id} not found.");
             }
-            else
+
+            var expenseModel = expense.ToModel();
+            var validationResult = _expenseValidator.Validate(expenseModel);
+
+            if (!validationResult.IsValid)
             {
-                var expenseModel = expense.ToModel();
-                var response = await _expenseRepository.Update(expenseModel, id);
-                return response;
+                throw new ValidationException(validationResult.Errors);
             }
-         }
+
+            var response = await _expenseRepository.Update(expenseModel, id);
+            return response;
+        }
+        catch (ValidationException ex)
+        {
+            throw new Exception($"Validation failed: {ex.Message}");
+        }
         catch (Exception ex)
         {
             throw new Exception($"An error occurred while updating the expense: {ex.Message}");

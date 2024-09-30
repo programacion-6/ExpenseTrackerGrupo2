@@ -1,12 +1,20 @@
 using ExpenseTrackerGrupo2.DependencyInjection;
 using ExpenseTrackerGrupo2.RequestPipeline;
 
+using FluentValidation;
+using FluentValidation.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddServices()
     .AddPersistence(builder.Configuration)
     .AddControllers();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<IncomeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ExpenseValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
