@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IIncomeServices, IncomeService>();
         services.AddScoped<IExpenseService, ExpenseService>();
+        services.AddScoped<IBudgetService, BudgetService>();
 
         return services;
     }
@@ -18,6 +19,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IIncomeRepository, IncomeRepository>();
         services.AddScoped<IExpenseRepository, ExpenseRepository>();
+        services.AddScoped<IBudgetRepository, BudgetRepository>();
         
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
