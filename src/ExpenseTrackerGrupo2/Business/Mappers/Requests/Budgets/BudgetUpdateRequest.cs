@@ -5,7 +5,7 @@ namespace ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Budgets;
 public record BudgetUpdateRequest
 (
     decimal BudgetAmount,
-    DateTime Month,
+    string Month,
     Guid User_id
 )
 {

@@ -16,7 +16,7 @@ public class BudgetRepository : BaseRepository<Budget>, IBudgetRepository
         return rowsAffected > 0;
     }
 
-    public async Task<Budget> GetBudgetByUserIdAndMonth(Guid userId, int month, int year)
+    public async Task<Budget> GetBudgetByUserIdAndMonth(Guid userId, string month, int year)
     {
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
         var query = "SELECT * FROM budget WHERE user_id = @UserId AND month = @Month AND year = @Year";

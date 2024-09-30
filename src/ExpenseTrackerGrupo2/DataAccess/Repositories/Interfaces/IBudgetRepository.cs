@@ -5,5 +5,5 @@ namespace ExpenseTrackerGrupo2.DataAccess.Concretes;
 public interface IBudgetRepository : IBaseRepository<Budget>
 {
     Task<bool> SetBudget(Budget budget);
-    Task<Budget> GetBudgetByUserIdAndMonth(Guid userId, int month, int year);
+    Task<Budget> GetBudgetByUserIdAndMonth(Guid userId, string month, int year);
 }
