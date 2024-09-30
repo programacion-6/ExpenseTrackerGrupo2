@@ -43,11 +43,8 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         var idColumn = $"{tableName}_id";
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
         var query = $"UPDATE {tableName} SET {StringUtils.GetSetClause<T>()} WHERE {idColumn} = @Id";
-
-        // Here we create a new anonymous object for the parameters
         var parameters = new DynamicParameters(entity);
-        parameters.Add("Id", id);  // Ensure id is added correctly
-
+        parameters.Add("Id", id); 
         return await connection.ExecuteAsync(query, parameters);
     }
 
