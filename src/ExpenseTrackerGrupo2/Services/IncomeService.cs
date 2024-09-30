@@ -1,7 +1,7 @@
 using ExpenseTrackerGrupo2.Business.Services.Interfaces;
 using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Incomes;
+using ExpenseTrackerGrupo2.Business.Services.Mappers.Responses;
 using ExpenseTrackerGrupo2.DataAccess.Concretes;
-using ExpenseTrackerGrupo2.DataAccess.Entities;
 
 public class IncomeService : IIncomeServices
 {
@@ -43,12 +43,14 @@ public class IncomeService : IIncomeServices
         }
     }
 
-    public async Task<IList<Income>> GetAllIncomes()
+    public async Task<IList<IncomeResponse>> GetAllIncomes()
     {
         try
         {
             var incomes = await _incomeRepository.GetAll();
-            return incomes;
+            var incomeResponses = incomes.Select(IncomeResponse.FromDomain).ToList();
+
+            return incomeResponses;
         }
         catch (Exception ex)
         {
@@ -56,7 +58,7 @@ public class IncomeService : IIncomeServices
         }
     }
 
-    public async Task<Income> GetIncomeById(Guid incomeId)
+    public async Task<IncomeResponse> GetIncomeById(Guid incomeId)
     {
         try
         {
@@ -67,7 +69,7 @@ public class IncomeService : IIncomeServices
                 throw new KeyNotFoundException($"Income with ID {incomeId} not found.");
             }
 
-            return income;
+            return IncomeResponse.FromDomain(income);
         }
         catch (Exception ex)
         {
