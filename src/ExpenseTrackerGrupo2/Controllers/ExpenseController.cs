@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExpenseTrackerGrupo2.Controllers;
 
 [ApiController]
-[Route("api/v1/expenses")]
+[Route("api/v1/[controller]")]
 public class ExpenseController : ControllerBase
 {
     private readonly IExpenseService _expenseService;

@@ -5,7 +5,8 @@ namespace ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Budgets;
 public record BudgetCreateRequest
 (
     decimal BudgetAmount,
-    DateTime Month
+    string Month,
+    Guid User_id
 )
 {
     public Budget ToModel()
@@ -13,7 +14,8 @@ public record BudgetCreateRequest
         return new Budget
         {
             budget_amount = BudgetAmount,
-            Month = Month
+            month = Month,
+            user_id = User_id
         };
     }
 }
