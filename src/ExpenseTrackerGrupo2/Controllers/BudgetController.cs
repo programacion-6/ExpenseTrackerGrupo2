@@ -5,7 +5,7 @@ using ExpenseTrackerGrupo2.Business.Services.Mappers.Requests.Budgets;
 namespace ExpenseTrackerGrupo2.API.Controllers;
 
 [ApiController]
-[Route("api/v1/budget/[controller]")]
+[Route("api/v1/[controller]")]
 public class BudgetController : ControllerBase
 {
     private readonly IBudgetService _budgetService;
