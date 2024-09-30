@@ -7,7 +7,7 @@ public record ExpenseResponse
     decimal Amount,
     string Description,
     string Category,
-    DateTime ExpenseDate
+    DateTime expense_date
 )
 {
     public static ExpenseResponse FromDomain(Expense expense)

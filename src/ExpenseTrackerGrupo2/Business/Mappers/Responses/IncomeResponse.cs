@@ -6,7 +6,7 @@ public record IncomeResponse
 (
     decimal Amount,
     string Source,
-    DateTime IncomeDate
+    DateTime income_date
 )
 {
     public static IncomeResponse FromDomain(Income income)
