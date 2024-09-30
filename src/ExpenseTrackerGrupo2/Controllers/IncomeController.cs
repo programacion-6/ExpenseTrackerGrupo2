@@ -93,7 +93,7 @@ namespace ExpenseTrackerGrupo2.API.Controllers
 
             try
             {
-                int? updatedIncome = await _incomeService.UpdateIncome(request);
+                int? updatedIncome = await _incomeService.UpdateIncome(request, id);
                 if (updatedIncome == null)
                 {
                     return NotFound($"Income with ID {id} not found.");
