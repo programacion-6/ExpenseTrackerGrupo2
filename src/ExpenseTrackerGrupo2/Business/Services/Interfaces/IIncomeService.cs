@@ -9,6 +9,6 @@ public interface IIncomeServices
     Task<IList<Income>> GetAllIncomes();
     Task<Income> GetIncomeById(Guid incomeId);
     Task<int> CreateIncome(IncomeCreateRequest income);
-    Task<int> UpdateIncome(IncomeUpdateRequest income);
+    Task<int> UpdateIncome(IncomeUpdateRequest income, Guid id);
     Task<bool> DeleteIncome(Guid incomeId);
 }
