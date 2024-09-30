@@ -73,12 +73,12 @@ public class ExpenseService : IExpenseService
         }
     }
 
-    public async Task<int> UpdateExpense(ExpenseUpdateRequest expense)
+    public async Task<int> UpdateExpense(ExpenseUpdateRequest expense, Guid id)
     {
         try
         {
             var expenseModel = expense.ToModel();
-            var response = await _expenseRepository.Update(expenseModel);
+            var response = await _expenseRepository.Update(expenseModel, id);
             return response;
         }
         catch (Exception ex)
