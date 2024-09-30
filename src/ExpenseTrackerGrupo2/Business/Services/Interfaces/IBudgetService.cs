@@ -7,7 +7,7 @@ public interface IBudgetService
 {
     Task<Budget> GetBudgetById(Guid id);
     Task<IList<Budget>> GetAllBudgets();
-    Task<Budget> CreateBudget(BudgetCreateRequest request);
-    Task<Budget> UpdateBudget(BudgetUpdateRequest request, Guid id);
+    Task<int> CreateBudget(BudgetCreateRequest request);
+    Task<int> UpdateBudget(BudgetUpdateRequest request, Guid id);
     Task<bool> DeleteBudget(Guid id);
 }
