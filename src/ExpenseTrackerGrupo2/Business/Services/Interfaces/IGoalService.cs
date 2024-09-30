@@ -10,4 +10,5 @@ public interface IGoalService
     Task<int> CreateGoal(GoalCreateRequest goal);
     Task<int> UpdateGoal(GoalUpdateRequest goal);
     Task<bool> DeleteGoal(Guid goalId);
+    Task<Goal> GetGoalByUserId (Guid userId);
 }

@@ -4,5 +4,5 @@ namespace ExpenseTrackerGrupo2.DataAccess.Concretes;
 
 public interface IGoalRepository : IBaseRepository<Goal>
 {
-    Task<IList<Expense>> NotifyGoal(int actualGoal);
+    Task <Goal> GetGoalByUserId(Guid userId);
 }

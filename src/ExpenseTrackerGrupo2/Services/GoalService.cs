@@ -86,4 +86,17 @@ public class GoalService : IGoalService
             throw new Exception($"An error occurred while updating the goal: {ex.Message}");
         }
     }
+
+    public async Task<Goal>GetGoalByUserId(Guid userId)
+    {
+        try
+        {
+            var goals = await _goalRepository.GetGoalByUserId(userId);
+            return goals;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"An error occurred while retrieving all goals: {ex.Message}");
+        }
+    }
 }

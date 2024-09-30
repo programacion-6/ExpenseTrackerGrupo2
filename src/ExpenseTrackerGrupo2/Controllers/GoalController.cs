@@ -15,7 +15,6 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             _goalService = goalService;
         }
 
-        // GET: /api/goal/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGoalById(Guid id)
         {
@@ -33,7 +32,6 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             return Ok(goal);
         }
 
-        // GET: /api/goal
         [HttpGet]
         public async Task<IActionResult> GetAllGoals()
         {
@@ -46,7 +44,6 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             return Ok(goals);
         }
 
-        // POST: /api/goal
         [HttpPost]
         public async Task<IActionResult> CreateGoal([FromBody] GoalCreateRequest request)
         {
@@ -71,7 +68,6 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             }
         }
 
-        // PUT: /api/goal/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateGoal(Guid id, [FromBody] GoalUpdateRequest request)
         {
@@ -101,7 +97,6 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             }
         }
 
-        // DELETE: /api/goal/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGoal(Guid id)
         {
@@ -123,6 +118,25 @@ namespace ExpenseTrackerGrupo2.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"An error occurred while deleting the goal: {ex.Message}");
+            }
+        }
+        
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetGoalByUserId(Guid userId)
+        {
+            try
+            {
+                var goal = await _goalService.GetGoalByUserId(userId);
+                if (goal == null)
+                {
+                    return NotFound("Goal not found for the specified user.");
+                }
+
+                return Ok(goal);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
     }
