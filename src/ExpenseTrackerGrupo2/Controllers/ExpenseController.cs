@@ -150,13 +150,27 @@ public class ExpenseController : ControllerBase
             return StatusCode(500, $"An error occurred: {ex.Message}");
         }
     }
-     [HttpGet("highestspendingcategory")]
+    [HttpGet("highestspendingcategory")]
     public async Task<IActionResult> GetHighestSpendingCategory()
     {
         try
         {
             var highestSpendingCategory = await _expenseService.GetHighestSpendingCategory();
             return Ok(highestSpendingCategory);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpGet("mostexpensesmonth")]
+    public async Task<IActionResult> GetMostExpensesMonth()
+    {
+        try
+        {
+            var mostExpensesMonth = await _expenseService.GetMostExpensesMonth();
+            return Ok(mostExpensesMonth);
         }
         catch (Exception ex)
         {
