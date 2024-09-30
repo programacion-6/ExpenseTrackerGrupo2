@@ -12,4 +12,5 @@ public interface IExpenseService
     Task<int> UpdateExpense(ExpenseUpdateRequest expense, Guid id);
     Task<bool> DeleteExpense(Guid expenseId);
     Task<IList<Expense>> GetExpenses(DateTime? startDate, DateTime? endDate, string? category);
+    Task<string> GetHighestSpendingCategory();
 }

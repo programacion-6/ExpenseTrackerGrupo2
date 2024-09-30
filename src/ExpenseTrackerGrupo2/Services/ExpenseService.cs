@@ -117,4 +117,36 @@ public class ExpenseService : IExpenseService
             throw new Exception($"An error occurred while updating the expense: {ex.Message}");
         }
     }
+        public async Task<string> GetHighestSpendingCategory()
+    {
+        try
+    {
+        var expenses = await _expenseRepository.GetAll();
+
+        var topSpendingCategories = expenses
+            .GroupBy(e => e.Category)
+            .Select(g => new
+            {
+                Category = g.Key,
+                Total = g.Sum(e => e.Amount)
+            })
+            .OrderByDescending(g => g.Total)
+            .Take(2)
+            .ToList();
+
+        if (topSpendingCategories.Any())
+        {
+            var result = string.Join("\n", topSpendingCategories.Select(c => $"Category: {c.Category} - Total Spending: {c.Total}"));
+            return result;
+        }
+        else
+        {
+            return "No expenses found.";
+        }
+    }
+    catch (Exception ex)
+    {
+        throw new Exception($"An error occurred while retrieving the top two spending categories: {ex.Message}");
+    }
+    }
 }
