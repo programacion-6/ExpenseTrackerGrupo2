@@ -111,42 +111,73 @@ public class ExpenseService : IExpenseService
                 var response = await _expenseRepository.Update(expenseModel, id);
                 return response;
             }
-         }
+        }
         catch (Exception ex)
         {
             throw new Exception($"An error occurred while updating the expense: {ex.Message}");
         }
     }
-        public async Task<string> GetHighestSpendingCategory()
+    public async Task<string> GetHighestSpendingCategory()
     {
         try
-    {
-        var expenses = await _expenseRepository.GetAll();
+        {
+            var expenses = await _expenseRepository.GetAll();
 
-        var topSpendingCategories = expenses
-            .GroupBy(e => e.Category)
-            .Select(g => new
+            var topSpendingCategories = expenses
+                .GroupBy(e => e.Category)
+                .Select(g => new
+                {
+                    Category = g.Key,
+                    Total = g.Sum(e => e.Amount)
+                })
+                .OrderByDescending(g => g.Total)
+                .Take(2)
+                .ToList();
+
+            if (topSpendingCategories.Any())
             {
-                Category = g.Key,
-                Total = g.Sum(e => e.Amount)
-            })
-            .OrderByDescending(g => g.Total)
-            .Take(2)
-            .ToList();
+                var result = string.Join("\n", topSpendingCategories.Select(c => $"Category: {c.Category} - Total Spending: {c.Total}"));
+                return result;
+            }
+            else
+            {
+                return "No expenses found.";
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"An error occurred while retrieving the top two spending categories: {ex.Message}");
+        }
+    }
 
-        if (topSpendingCategories.Any())
-        {
-            var result = string.Join("\n", topSpendingCategories.Select(c => $"Category: {c.Category} - Total Spending: {c.Total}"));
-            return result;
-        }
-        else
-        {
-            return "No expenses found.";
-        }
-    }
-    catch (Exception ex)
+    public async Task<string> GetMostExpensesMonth()
     {
-        throw new Exception($"An error occurred while retrieving the top two spending categories: {ex.Message}");
-    }
+        try
+        {
+            var expenses = await _expenseRepository.GetAll();
+
+            var mostExpensesMonth = expenses
+                .GroupBy(e => e.expense_date.ToString("MMMM yyyy"))
+                .Select(g => new
+                {
+                    Month = g.Key,
+                    Total = g.Count()
+                })
+                .OrderByDescending(g => g.Total)
+                .FirstOrDefault();
+
+            if (mostExpensesMonth != null)
+            {
+                return $"Month: {mostExpensesMonth.Month} - Total Expenses: {mostExpensesMonth.Total}";
+            }
+            else
+            {
+                return "No expenses found.";
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"An error occurred while retrieving the month with the most expenses: {ex.Message}");
+        }
     }
 }
